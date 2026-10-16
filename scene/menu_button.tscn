@@ -1,0 +1,21 @@
+; Modified for the Apple port: resolve external game resources using explicit paths.
+[gd_scene load_steps=4 format=3 uid="uid://bkg3mbvjllejg"]
+
+[ext_resource type="Script" path="res://script/Wa2Button.cs" id="1_7ig6y"]
+[ext_resource type="Texture2D" path="res://assets/grp/T0101.png" id="2_ggccj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dcxh0"]
+atlas = ExtResource("2_ggccj")
+region = Rect2(0, 0, 320, 40)
+
+[node name="MenuButton" type="TextureButton"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_7ig6y")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_dcxh0")

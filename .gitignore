@@ -1,0 +1,127 @@
+# Godot and .NET generated files
+.godot/
+.mono/
+.vs/
+/bin/
+/obj/
+/tests/**/bin/
+/tests/**/obj/
+*.uid
+
+# Android build template and generated packages
+/android/
+*.apk
+*.aab
+
+# Signing keys and local secrets: never commit these
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+.env
+.env.*
+
+# Native build intermediates (runtime DLL/SO files under addons are intentional)
+.sconsign.dblite
+*.obj
+*.o
+*.os
+*.a
+*.lib
+*.exp
+*.pdb
+*.dSYM/
+.scons_cache/
+.sconf_temp/
+config.log
+/thirdparty/*
+!/thirdparty/.gdignore
+/build/*
+!/build/.gdignore
+
+# iOS XCFramework archives are final distributable plugin artifacts
+!/addons/wmv_video/bin/ios/*.xcframework/**/*.a
+# tvOS artifacts are reproduced with the pinned source toolchain.
+/addons/wmv_video/bin/tvos/
+
+# Superseded plugin binaries retained locally while Godot holds the old DLL
+/addons/wmv_video/bin/wmv_video_v0_4.windows.*.dll
+/addons/wmv_video/bin/android/arm64-v8a/libwmv_video_v0_4.android.*.so
+/addons/wmv_video/bin/wmv_video_v0_5.windows.*.dll
+/addons/wmv_video/bin/android/arm64-v8a/libwmv_video_v0_5.android.*.so
+/addons/wmv_video/bin/~*.dll*
+
+# Local editor/tool state
+.VSCodeCounter/
+.vscode/
+.qodo/
+.qodo
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+DerivedData/
+*.xcarchive/
+xcuserdata/
+*.xcuserstate
+/sav/
+/.local_backup/
+
+# Repository-local artwork excluded from distribution
+/PIC1.PNG
+/icon.png
+
+# Original game data and user-provided media: not redistributable here
+*.pak
+*.ogg
+*.wav
+*.WAV
+*.mp4
+*.ogv
+*.zip
+/assets/grp/
+/assets/movie/
+/assets/se/
+/assets/IC/
+/assets/fonts/cn/
+/assets/fonts/jp/
+/assets/fonts/fzzyjt.ttf
+/assets/fonts/fzzyjt.ttf.import
+/assets/fonts/AlibabaPuHuiTi-3-65-Medium.ttf
+/assets/fonts/AlibabaPuHuiTi-3-65-Medium.ttf.import
+
+# Apple port additions
+# Assistant/agent instruction files are local-only
+Claude.md
+CLAUDE.md
+AGENTS.md
+# Machine-specific quickstart notes
+/APPLE_QUICKSTART_zh.md
+# Apple signing material and API keys
+*.mobileprovision
+*.provisionprofile
+*.cer
+*.certSigningRequest
+AuthKey_*.p8
+*.p8
+.pw.txt
+.cf.env
+*.token
+secrets.*
+# Original game data in any letter case (users supply their own purchased copy)
+*.PAK
+*.Pak
+*.OGG
+*.WAV
+*.wmv
+*.WMV
+*.sav
+*.SAV
+/Wa2Res/
+/Wa2SC/
+**/resource-transfer/
+# Third-party subtitle/lyric translations without redistribution permission;
+# place your own copy at <game data>/subtitles/zh-Hans.yaml instead
+/assets/sub.yaml

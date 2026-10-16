@@ -1,0 +1,129 @@
+--- a/platform/tvos/detect.py
++++ b/platform/tvos/detect.py
+@@ -107,2 +107,2 @@
+-        env.Append(ASFLAGS=["-mtvos-simulator-version-min=26.0"])
+-        env.Append(CCFLAGS=["-mtvos-simulator-version-min=26.0"])
++        env.Append(ASFLAGS=["-mtvos-simulator-version-min=17.0"])
++        env.Append(CCFLAGS=["-mtvos-simulator-version-min=17.0"])
+@@ -113,2 +113,2 @@
+-        env.Append(ASFLAGS=["-mtvos-version-min=26.0"])
+-        env.Append(CCFLAGS=["-mtvos-version-min=26.0"])
++        env.Append(ASFLAGS=["-mtvos-version-min=17.0"])
++        env.Append(CCFLAGS=["-mtvos-version-min=17.0"])
+@@ -147,4 +146,0 @@
+-    if env["metal"] and env["simulator"]:
+-        print_warning("tvOS Simulator does not support the Metal rendering driver")
+-        env["metal"] = False
+-
+--- a/platform_methods.py
++++ b/platform_methods.py
+@@ -326 +326 @@
+-        target_suffix = "tvos26.0"
++        target_suffix = "tvos17.0"
+@@ -329 +329 @@
+-        target_suffix = "tvos26.0-simulator"
++        target_suffix = "tvos17.0-simulator"
+--- a/drivers/apple_embedded/os_apple_embedded.mm
++++ b/drivers/apple_embedded/os_apple_embedded.mm
+@@ -398,0 +399,3 @@
++		#ifdef TVOS_ENABLED
++		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
++#else
+@@ -399,0 +403 @@
++#endif
+--- a/drivers/apple_embedded/godot_view_controller.mm
++++ b/drivers/apple_embedded/godot_view_controller.mm
+@@ -40,0 +41 @@
++#include "core/input/input_event.h"
+@@ -54,0 +56,8 @@
++#ifdef TVOS_ENABLED
++static bool wa2_menu_passthrough = false;
++static bool wa2_menu_forwarding = false;
++extern "C" __attribute__((visibility("default"), used)) void wa2_set_menu_passthrough(int enabled) {
++	wa2_menu_passthrough = enabled != 0;
++}
++#endif
++
+@@ -60,0 +70,47 @@
++#ifdef TVOS_ENABLED
++- (BOOL)wa2_remotePresses:(NSSet<UIPress *> *)presses pressed:(BOOL)pressed {
++	if (!DisplayServerAppleEmbedded::get_singleton()) return NO;
++	BOOL handled = NO;
++	for (UIPress *press in presses) {
++		Key key = Key::NONE;
++		switch (press.type) {
++			case UIPressTypeUpArrow: key = Key::UP; break;
++			case UIPressTypeDownArrow: key = Key::DOWN; break;
++			case UIPressTypeLeftArrow: key = Key::LEFT; break;
++			case UIPressTypeRightArrow: key = Key::RIGHT; break;
++			case UIPressTypeSelect: key = Key::ENTER; break;
++			case UIPressTypeMenu:
++				// At the app's root screens Menu must reach UIKit so tvOS returns
++				// to the Home screen. The decision made on press is kept for release.
++				if (pressed) wa2_menu_forwarding = wa2_menu_passthrough;
++				if (wa2_menu_forwarding) continue;
++				key = Key::ESCAPE;
++				break;
++			case UIPressTypePlayPause: key = Key::P; break;
++			default: continue;
++		}
++		Ref<InputEventKey> event; event.instantiate();
++		event->set_keycode(key); event->set_pressed(pressed);
++		DisplayServerAppleEmbedded::get_singleton()->send_input_event(event);
++		handled = YES;
++	}
++	return handled;
++}
++- (void)wa2_swipe:(UISwipeGestureRecognizer *)gesture {
++	Key key = Key::NONE;
++	switch (gesture.direction) {
++		case UISwipeGestureRecognizerDirectionUp: key = Key::UP; break;
++		case UISwipeGestureRecognizerDirectionDown: key = Key::DOWN; break;
++		case UISwipeGestureRecognizerDirectionLeft: key = Key::LEFT; break;
++		case UISwipeGestureRecognizerDirectionRight: key = Key::RIGHT; break;
++		default: return;
++	}
++	if (!DisplayServerAppleEmbedded::get_singleton()) return;
++	for (bool pressed : {true, false}) {
++		Ref<InputEventKey> event; event.instantiate();
++		event->set_keycode(key); event->set_pressed(pressed);
++		DisplayServerAppleEmbedded::get_singleton()->send_input_event(event);
++	}
++}
++#endif
++
+@@ -61,0 +118,3 @@
++#ifdef TVOS_ENABLED
++	if ([self wa2_remotePresses:presses pressed:YES]) return;
++#endif
+@@ -96,0 +156,3 @@
++#ifdef TVOS_ENABLED
++	if ([self wa2_remotePresses:presses pressed:NO]) return;
++#endif
+@@ -168,0 +231,7 @@
++#ifdef TVOS_ENABLED
++	for (NSNumber *direction in @[@(UISwipeGestureRecognizerDirectionUp), @(UISwipeGestureRecognizerDirectionDown), @(UISwipeGestureRecognizerDirectionLeft), @(UISwipeGestureRecognizerDirectionRight)]) {
++		UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(wa2_swipe:)];
++		swipe.direction = direction.unsignedIntegerValue;
++		[self.view addGestureRecognizer:swipe];
++	}
++#endif
+--- a/platform/tvos/godot_view_tvos.mm
++++ b/platform/tvos/godot_view_tvos.mm
+@@ -50,0 +51,3 @@
++- (BOOL)canBecomeFirstResponder { return YES; }
++- (void)didMoveToWindow { [super didMoveToWindow]; if (self.window) [self becomeFirstResponder]; }
++
+--- a/modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk/Sdk/iOS.targets
++++ b/modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk/Sdk/iOS.targets
+@@ -47 +47,4 @@
+-      <LinkerArg Include="-mtvos-version-min=26.0 -isysroot %22$(XCodePath)Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS.sdk%22"
++      <LinkerArg Include="-mtvos-simulator-version-min=17.0 -isysroot %22$(XCodePath)Platforms/AppleTVSimulator.platform/Developer/SDKs/AppleTVSimulator.sdk%22"
++                 Condition=" $(RuntimeIdentifier.Contains('simulator')) and '$(GodotTargetPlatform)' == 'tvos' "/>
++
++      <LinkerArg Include="-mtvos-version-min=17.0 -isysroot %22$(XCodePath)Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS.sdk%22"
+--- a/platform/tvos/export/export_plugin.h
++++ b/platform/tvos/export/export_plugin.h
+@@ -44 +44 @@
+-	virtual String get_minimum_deployment_target() const override { return "26.0"; }
++	virtual String get_minimum_deployment_target() const override { return "17.0"; }

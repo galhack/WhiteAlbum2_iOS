@@ -1,0 +1,9 @@
+; Modified for the Apple port: resolve external game resources using explicit paths.
+[gd_scene load_steps=2 format=3 uid="uid://ccgml2kidjj3u"]
+
+[ext_resource type="Script" path="res://script/Weather.cs" id="1_mcfid"]
+
+[node name="Weather" type="Node2D"]
+position = Vector2(639.25, 356.25)
+scale = Vector2(1279.5, 713.5)
+script = ExtResource("1_mcfid")

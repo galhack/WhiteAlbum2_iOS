@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net9.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
+  <ItemGroup><Compile Include="Program.cs"/><Compile Include="../../script/Wa2LaunchOptions.cs" Link="Wa2LaunchOptions.cs"/><Compile Include="../../script/Wa2Encoding.cs" Link="Wa2Encoding.cs"/><Compile Include="../../script/Wa2Tga.cs" Link="Wa2Tga.cs"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2Value.cs" Link="Wa2Value.cs"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2Subtitles.cs" Link="Wa2Subtitles.cs"/><PackageReference Include="YamlDotNet" Version="16.3.0"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2Content.cs" Link="Wa2Content.cs"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2Progression.cs" Link="Wa2Progression.cs"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2FocusNavigation.cs" Link="Wa2FocusNavigation.cs"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2LocalSnapshot.cs" Link="Wa2LocalSnapshot.cs"/></ItemGroup>
+  <ItemGroup><Compile Include="../../script/Wa2LruCache.cs" Link="Wa2LruCache.cs"/><Compile Include="../../script/Wa2TouchInput.cs" Link="Wa2TouchInput.cs"/></ItemGroup>
+</Project>

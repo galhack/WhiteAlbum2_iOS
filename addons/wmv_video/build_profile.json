@@ -1,0 +1,14 @@
+{
+  "enabled_classes": [
+    "AudioStreamGenerator",
+    "AudioStreamGeneratorPlayback",
+    "AudioStreamPlayer",
+    "FileAccess",
+    "Image",
+    "ImageTexture",
+    "OS",
+    "ProjectSettings",
+    "TextureRect",
+    "Time"
+  ]
+}
