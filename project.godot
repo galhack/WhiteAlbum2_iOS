@@ -19,6 +19,12 @@ config/icon="res://assets/app_icon/app_icon_1024.png"
 ; Script diagnostics print heavily; release builds keep only errors.
 run/disable_stdout.release=true
 
+[audio]
+
+; Apple port: the default Ambient session is silenced by the iPhone's
+; silent switch/Action button. A visual novel's voice and music should play.
+general/ios/session_category=3
+
 [display]
 
 window/size/viewport_width=1280
