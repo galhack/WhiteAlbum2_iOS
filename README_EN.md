@@ -2,7 +2,7 @@
 
 # WHITE ALBUM 2 · Apple Port
 
-Play *WHITE ALBUM 2* natively on iPhone, iPad, Apple Vision Pro and Apple TV.
+Play *WHITE ALBUM 2* natively on iPhone, iPad, Apple Vision Pro, Apple TV and Mac.
 
 This is an **engine port** built on [dorakyuraduang/wa2-godot](https://github.com/dorakyuraduang/wa2-godot), a Godot 4 .NET reimplementation of the original engine. It adds Apple platform support, touch and Siri Remote controls, and performance work.
 
@@ -16,6 +16,7 @@ This is an **engine port** built on [dorakyuraduang/wa2-godot](https://github.co
 | iPad | iPadOS 15 | Native app | iPad Pro 13-inch (M5) · iPadOS 26.4 |
 | Apple Vision Pro | visionOS (compatible iPad app) | Flat window, gaze + pinch | Vision Pro (1st gen) · visionOS 27.2 |
 | Apple TV | tvOS 17 | Separate native tvOS app, Siri Remote | Apple TV 4K (3rd gen, 2022) · tvOS 17.6 |
+| Mac | macOS 12, Apple silicon | Native app, windowed or full screen | MacBook Pro (M1 Max) · macOS 26.6 |
 
 All builds are native ARM64: C# is compiled ahead of time with NativeAOT and rendering uses Metal. No JIT or jailbreak is needed.
 
@@ -45,7 +46,15 @@ Do not nest folders. `Wa2Res` must directly contain `BGM.PAK`, `IC/` and so on.
 
 ## 2. Get the app package
 
-Build the unsigned IPA from source (see [Building from source](#building-from-source)), or download one from this repository's Releases page if provided. The IPA contains no game data.
+Download from [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases):
+
+- `WA2-iPhone-iPad.ipa`: iPhone/iPad, unsigned. Sign it with your own Apple ID in Sideloadly.
+- `WA2-AppleTV.ipa`: Apple TV, unsigned.
+- `WA2-macOS.dmg`: Mac with Apple silicon.
+- `ffmpeg-7.1.5.tar.xz`: the corresponding FFmpeg source, provided as the LGPL requires. You do not need it to play.
+- `SHA256SUMS.txt`: checksums.
+
+The packages contain no game content. You can also [build them from source](#building-from-source).
 
 ## 3. Install
 
@@ -62,6 +71,12 @@ Free accounts can have 3 sideloaded apps per device, and signatures last 7 days.
 
 Pair the device in Xcode → Devices and Simulators. Then build with your own team and install with `xcrun devicectl device install app`. The exact commands are in the Chinese README and in [APPLE_TV.md](APPLE_TV.md). Vision Pro runs the same app as iPhone/iPad (*Designed for iPad*).
 
+**Mac**
+
+1. Open `WA2-macOS.dmg` and drag **WA2** to Applications.
+2. The app is not notarized. If macOS refuses to open it, click **Open Anyway** in **System Settings → Privacy & Security**, or run `xattr -dr com.apple.quarantine /Applications/WA2.app`.
+3. Nothing needs copying on a Mac. Click **Choose folder** and select the PC game folder directly: either the main game folder that contains `IC/`, or the Special Contents folder.
+
 ## 4. Import the game data
 
 - **iPhone / iPad**: in Finder, select the device → **Files** tab → **wa2**, and drag in the whole `Wa2Res` and `Wa2SC` folders. On Windows, use File Sharing in the Apple Devices app or iTunes. You can also copy the folders on the device through the Files app (**On My iPhone/iPad → wa2**).
@@ -76,7 +91,7 @@ Launch the app, tap **Main** or **Special Contents**, choose a language and pres
 | Action | Touch | Siri Remote | Keyboard / mouse |
 | --- | --- | --- | --- |
 | Advance text | Tap | Click (Select) | Click / Enter |
-| Menu | **≡** button, top right | Menu / Back | Esc |
+| Menu | **≡** button, top right | Menu / Back | Esc, or click ≡ |
 | Skip | Menu → Skip, or long-press (enable it in Options) | Menu → Skip | Hold Ctrl |
 | Auto | Menu → Auto | Play/Pause | Quick bar |
 | Backlog | Menu → Backlog, then drag | Menu → Backlog, then up/down | Mouse wheel |
@@ -110,12 +125,39 @@ xcodebuild -project build/ios/WA2.xcodeproj -scheme WA2 -configuration Release -
 python3 tools/package_ipa.py build/ios-derived/Build/Products/Release-iphoneos/WA2.app build/WA2-iPhone-iPad.ipa
 ```
 
+To produce every release package at once (iOS, tvOS, Mac, notices, FFmpeg source and checksums), run `GODOT=… TVOS_ENGINE=… FFMPEG_SOURCE=… tools/build_release.sh`. The output goes to `build/release/`.
+
 For the FFmpeg plugin and templates, see [APPLE_PORT.md](APPLE_PORT.md) and [addons/wmv_video/BUILDING.md](addons/wmv_video/BUILDING.md). For Apple TV, see [APPLE_TV.md](APPLE_TV.md).
+
+## FFmpeg and the LGPL
+
+The apps use FFmpeg 7.1.5 under the GNU LGPL 2.1 or later. Only LGPL components are enabled: there is no `--enable-gpl`, `--enable-nonfree` or `--enable-version3`, and the build includes only the ASF demuxer and the WMV, VC-1 and WMA decoders.
+
+- **Mac**: FFmpeg is a set of replaceable dynamic libraries in `WA2.app/Contents/Frameworks`.
+- **iPhone, iPad, Vision Pro and Apple TV**: FFmpeg is linked statically. To meet the LGPL for these builds:
+  - the complete application source and build scripts are published here;
+  - every release attaches the corresponding FFmpeg source;
+  - each app shows the full LGPL text under **Licenses** on the launcher.
+
+To relink the iOS app with a modified FFmpeg, run these steps and then rebuild as described above:
+
+```sh
+python3 tools/build_ios_ffmpeg.py /path/to/your/ffmpeg --jobs 8
+python3 addons/wmv_video/tools/build.py --platform ios --target both --jobs 8
+```
+
+You may modify the app for your own use and reverse engineer it to debug such modifications.
 
 ## Credits and licensing
 
 The engine reimplementation is by [dorakyuraduang/wa2-godot](https://github.com/dorakyuraduang/wa2-godot) and its contributors. The project uses Godot (MIT), FFmpeg (LGPL 2.1+), godot-cpp and YamlDotNet; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-There is no single repository license. The porting code listed in [PORTING_CODE.md](PORTING_CODE.md) is Apache-2.0, and `addons/wmv_video` is MIT. For everything else, see [LICENSE](LICENSE) and [ASSET_POLICY.md](ASSET_POLICY.md).
+Licensing is per file:
+
+- **Apache-2.0**: the upstream porting code, plus the code, tools and documentation added by the Apple port.
+- **MIT**: `addons/wmv_video` and two files derived from Godot and godot-cpp.
+- **LGPL-2.1-or-later**: FFmpeg.
+
+[LICENSE](LICENSE) gives the full scope.
 
 *WHITE ALBUM 2* and all of its content are © Leaf / AQUAPLUS. This project is not affiliated with or endorsed by the rights holders and distributes no game data.

@@ -131,6 +131,8 @@ public partial class Wa2RemoteNavigation : Control
         // Popup windows (e.g. the language selector) use Godot's own focus/input.
         var owner = GetViewport().GuiGetFocusOwner();
         if (owner is LineEdit && !_remoteActive) return;
+        // Read-only text (licenses) scrolls with the arrows; Menu closes its panel.
+        if (owner is TextEdit && owner.IsVisibleInTree()) return;
         if (owner is OptionButton option && option.GetPopup().Visible) return;
         if (owner != null && owner.GetWindow() != GetWindow()) return;
         // Play/Pause toggles auto-advance while reading; elsewhere it acts as Menu.

@@ -56,12 +56,21 @@ public partial class Wa2Launcher : Control
         _language = new OptionButton { CustomMinimumSize = buttonSize };
         foreach (string name in new[] { "日本語", "简体中文 · CK-GAL", "English · translation required", "繁體中文 · 需语言包" }) _language.AddItem(name);
         box.AddChild(_language);
-        var play = new Button { Text = "Play / 开始游戏 / 開始", CustomMinimumSize = buttonSize };
+        // Play and the licence viewer share a row so the launcher fits 720 px at phone font sizes.
+        var actions = new HBoxContainer();
+        actions.AddThemeConstantOverride("separation", 16);
+        box.AddChild(actions);
+        var play = new Button { Text = "Play / 开始游戏 / 開始", CustomMinimumSize = buttonSize, SizeFlagsHorizontal = SizeFlags.ExpandFill };
         play.Pressed += Play;
-        box.AddChild(play);
+        actions.AddChild(play);
+        var licenses = new Button { Text = "Licenses / 开源许可", CustomMinimumSize = buttonSize };
+        actions.AddChild(licenses);
+        var licensePanel = new Wa2LicensePanel();
+        licenses.Pressed += () => licensePanel.Open(licenses);
         _status = new Label { AutowrapMode = TextServer.AutowrapMode.WordSmart };
         _status.AddThemeFontSizeOverride("font_size", Wa2UiMetrics.SmallFontSize);
         box.AddChild(_status);
+        AddChild(licensePanel);
         string documents = OS.GetName() is "iOS" or "tvOS" ? ProjectSettings.GlobalizePath("user://") : OS.GetSystemDir(OS.SystemDir.Documents);
         string defaultDirectory = Path.Combine(documents, "Wa2Res");
         var config = new ConfigFile();

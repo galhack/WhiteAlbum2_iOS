@@ -82,8 +82,8 @@ platform="tvOS"
 runnable=true
 advanced_options=true
 export_filter="all_resources"
-include_filter="*.map,*.yaml"
-exclude_filter="tests/*,build/*,thirdparty/*,*.pak,*.exe,*.dll,assets/grp/*,assets/fonts/cn/*,assets/fonts/jp/*,assets/se/*,assets/app_icon/*.svg"
+include_filter="*.map,*.yaml,assets/legal/*.txt"
+exclude_filter="tests/*,build/*,thirdparty/*,*.pak,*.exe,*.dll,assets/grp/*,assets/fonts/cn/*,assets/fonts/jp/*,assets/se/*,assets/app_icon/*.svg,assets/sub.yaml,icon.svg,icon.png,PIC1.PNG"
 export_path="{ROOT}/build/tvos/WA2.ipa"
 script_export_mode=2
 

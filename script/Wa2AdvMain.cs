@@ -112,7 +112,8 @@ public partial class Wa2AdvMain : Control
 		OffButton.ButtonDown += OnOffButtonDown;
 		OptionButton.ButtonDown += OnOptionButtonDown;
 		BackLogButton.ButtonDown += OnBackLogButtonDown;
-		if (OS.GetName() == "iOS") AddTouchMenuButton();
+		// Touch devices have no Esc key; on the Mac it makes the menu discoverable.
+		if (OS.GetName() is "iOS" or "macOS") AddTouchMenuButton();
 		for (int i = 0; i < SelectMessageContainer.GetChildCount(); i++)
 		{
 			int idx = i;

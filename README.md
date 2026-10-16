@@ -2,7 +2,7 @@
 
 # WHITE ALBUM 2 · Apple 移植版
 
-在 iPhone、iPad、Apple Vision Pro 和 Apple TV 上原生运行《WHITE ALBUM 2》。
+在 iPhone、iPad、Apple Vision Pro、Apple TV 和 Mac 上原生运行《WHITE ALBUM 2》。
 
 本项目是一个**引擎移植**：基于 [dorakyuraduang/wa2-godot](https://github.com/dorakyuraduang/wa2-godot) 的 Godot 4 .NET 重写版引擎，增加了 Apple 平台适配、触屏与遥控器操作，并做了性能优化。
 
@@ -20,12 +20,14 @@
   - [iPhone / iPad（Sideloadly）](#iphone--ipadsideloadly)
   - [Apple Vision Pro（Xcode）](#apple-vision-proxcode)
   - [Apple TV（Xcode）](#apple-tvxcode)
+  - [Mac](#mac)
 - [第四步：导入游戏数据](#第四步导入游戏数据)
 - [操作方式](#操作方式)
 - [语言与字幕](#语言与字幕)
 - [存档与章节解锁](#存档与章节解锁)
 - [常见问题](#常见问题)
 - [从源码构建](#从源码构建)
+- [FFmpeg 与 LGPL](#ffmpeg-与-lgpl)
 - [致谢与许可](#致谢与许可)
 
 ---
@@ -38,13 +40,14 @@
 | iPad | iPadOS 15 | 原生应用 | iPad Pro 13 英寸（M5）· iPadOS 26.4 |
 | Apple Vision Pro | visionOS（兼容 iPad 应用） | 空间中的平面窗口，注视＋捏合操作 | Vision Pro 第一代 · visionOS 27.2 |
 | Apple TV | tvOS 17 | 独立的 tvOS 原生应用，Siri Remote 操作 | Apple TV 4K（第三代，2022）· tvOS 17.6 |
+| Mac | macOS 12，Apple 芯片 | 原生应用，窗口或全屏 | MacBook Pro（M1 Max）· macOS 26.6 |
 
 所有版本都是 ARM64 原生代码（C# 通过 NativeAOT 提前编译，渲染走 Metal），不需要 JIT，也不需要越狱。
 
 ## 准备工作
 
 - **正版《WHITE ALBUM 2》PC 版**：需要本篇（含 IC/CC/Coda），可选择另购 Special Contents。
-- 一台 **Mac**（推荐）或 Windows 电脑，用来签名安装应用、拷贝游戏数据。
+- 一台 **Mac**（推荐）或 Windows 电脑，用来签名安装应用、拷贝游戏数据。在 Mac 上玩则不需要其他设备。
 - 一个 **Apple ID**。免费账户即可，但签名 7 天后过期，需要重签（见[常见问题](#常见问题)）。
 - 设备上至少要有 **12 GB 可用空间**：本篇约 7.9 GB，Special Contents 约 3.5 GB。
 - 安装工具：
@@ -84,14 +87,17 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 ## 第二步：获取安装包
 
-本仓库不提供游戏数据，安装包需要自己构建：
+在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
-| 平台 | 安装包 | 构建方法 |
-| --- | --- | --- |
-| iPhone / iPad / Vision Pro | `WA2-iPhone-iPad.ipa`（未签名） | [从源码构建](#从源码构建) |
-| Apple TV | `WA2-AppleTV.ipa`（未签名） | 见 [APPLE_TV.md](APPLE_TV.md) |
+| 文件 | 用途 |
+| --- | --- |
+| `WA2-iPhone-iPad.ipa` | iPhone / iPad，未签名，用 Sideloadly 以你自己的 Apple ID 签名安装 |
+| `WA2-AppleTV.ipa` | Apple TV，未签名 |
+| `WA2-macOS.dmg` | Mac（Apple 芯片） |
+| `ffmpeg-7.1.5.tar.xz` | 应用所用 FFmpeg 的对应源码（LGPL 要求随附，玩游戏用不到） |
+| `SHA256SUMS.txt` | 校验值 |
 
-如果本仓库的 Releases 页面提供了预编译 IPA，也可以直接下载。IPA 里不含任何游戏内容。
+安装包里**不含任何游戏内容**。也可以按[从源码构建](#从源码构建)自己编译。
 
 ## 第三步：安装到设备
 
@@ -138,6 +144,18 @@ xcrun devicectl device install app --device 设备ID build/tvos-signed/Build/Pro
 
 > Sideloadly 新版也支持 Apple TV，但我们测试时它与这台电视的配对报 `Mux error (-8)`，所以目前以 Xcode 方式为准。
 
+### Mac
+
+1. 打开 `WA2-macOS.dmg`，把 **WA2** 拖进"应用程序"文件夹。
+2. 本应用没有经过 Apple 公证。第一次打开时，如果系统提示无法验证开发者：打开 **系统设置 → 隐私与安全性**，在页面下方点 **仍要打开**；或者在终端执行：
+
+```sh
+xattr -dr com.apple.quarantine /Applications/WA2.app
+```
+
+3. Mac 版**不需要拷贝数据**：在启动界面点 **Choose folder / 选择目录**，直接选择 PC 游戏所在的文件夹（含 `IC/` 的本篇目录，或 Special Contents 目录）即可。也可以使用整理好的 `Wa2Res` / `Wa2SC`。
+4. 窗口大小可以随意调整，点绿色按钮进入全屏。
+
 ## 第四步：导入游戏数据
 
 ### iPhone / iPad
@@ -177,7 +195,7 @@ xcrun devicectl device copy to --device 设备ID --source ~/Desktop/resource-tra
 | 操作 | 触屏（iPhone / iPad） | Vision Pro | Siri Remote（Apple TV） | 键盘鼠标 |
 | --- | --- | --- | --- | --- |
 | 推进文字 | 点击画面 | 注视后捏合 | 按下触控板（Select） | 左键 / Enter |
-| 打开菜单 | 右上角 **≡** 按钮 | 注视 ≡ 后捏合 | **Menu / 返回** 键 | Esc |
+| 打开菜单 | 右上角 **≡** 按钮 | 注视 ≡ 后捏合 | **Menu / 返回** 键 | Esc，或点右上角 ≡ |
 | 快进 | 菜单 → 快进；或长按画面（需在设置中开启） | 菜单 → 快进 | 菜单 → 快进 | 按住 Ctrl |
 | 自动播放 | 菜单 → 自动，或底部快捷栏 | 同左 | **播放/暂停** 键，或菜单 → 自动 | 快捷栏 |
 | 历史记录 | 菜单 → 历史，上下拖动翻页 | 同左 | 菜单 → 历史，上下键翻页 | 滚轮 |
@@ -245,14 +263,34 @@ xcodebuild -project build/ios/WA2.xcodeproj -scheme WA2 -configuration Release -
 python3 tools/package_ipa.py build/ios-derived/Build/Products/Release-iphoneos/WA2.app build/WA2-iPhone-iPad.ipa
 ```
 
+- 一次性生成全部发行包（iOS / tvOS / Mac、许可文件、FFmpeg 源码与校验值）：`GODOT=… TVOS_ENGINE=… FFMPEG_SOURCE=… tools/build_release.sh`，输出在 `build/release/`。
 - FFmpeg 视频插件和 iOS 模板的准备步骤见 [APPLE_PORT.md](APPLE_PORT.md) 和 [addons/wmv_video/BUILDING.md](addons/wmv_video/BUILDING.md)。
 - Apple TV 使用锁定版本的 Godot tvOS 开发分支和本仓库的引擎补丁，完整步骤见 [APPLE_TV.md](APPLE_TV.md)。
 - 应用图标由 `tools/make_app_icons.py` 生成，是原创的几何雪花图案。
 
+## FFmpeg 与 LGPL
+
+应用使用 [FFmpeg](https://ffmpeg.org/) 7.1.5 播放原作的 WMV/WMA 影片。FFmpeg 采用 GNU LGPL 2.1 或更高版本授权，本项目的构建只启用 LGPL 组件（未使用 `--enable-gpl`、`--enable-nonfree`、`--enable-version3`），只包含 ASF 解封装器和 WMV/VC-1/WMA 解码器。
+
+- **Mac 版**：FFmpeg 以动态库形式放在 `WA2.app/Contents/Frameworks`，可以直接替换。
+- **iPhone / iPad / Vision Pro / Apple TV 版**：FFmpeg 静态链接进应用。为满足 LGPL 的要求，本仓库公开了应用的全部源码和构建脚本，每个 Release 都附带对应的 FFmpeg 源码包，应用内（启动界面 → **Licenses / 开源许可**）也附有完整的 LGPL 文本。
+
+用修改过的 FFmpeg 重新构建 iOS 版：
+
+```sh
+# 1. 用你修改过的 FFmpeg 源码构建静态库（配置选项见脚本）
+python3 tools/build_ios_ffmpeg.py /path/to/your/ffmpeg --jobs 8
+# 2. 用新库重新编译视频插件
+python3 addons/wmv_video/tools/build.py --platform ios --target both --jobs 8
+# 3. 按"从源码构建"重新导出、编译、打包 IPA，再用 Sideloadly 安装
+```
+
+Apple TV 版的对应步骤见 [APPLE_TV.md](APPLE_TV.md)。你可以为自用目的修改本应用，并为调试这些修改而对其进行逆向工程。
+
 ## 致谢与许可
 
 - 引擎重写：[dorakyuraduang/wa2-godot](https://github.com/dorakyuraduang/wa2-godot) 及其贡献者。
-- [Godot Engine](https://godotengine.org/)（MIT）、[FFmpeg](https://ffmpeg.org/)（LGPL 2.1+，最小化构建）、godot-cpp、YamlDotNet，各自保留原许可证，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
-- 本仓库**不是**按单一许可证发布的：[PORTING_CODE.md](PORTING_CODE.md) 列出的移植代码采用 Apache-2.0，`addons/wmv_video` 采用 MIT，其余文件的范围见 [LICENSE](LICENSE) 和 [ASSET_POLICY.md](ASSET_POLICY.md)。
+- [Godot Engine](https://godotengine.org/)（MIT）、[FFmpeg](https://ffmpeg.org/)（LGPL 2.1+）、godot-cpp、.NET 运行时、YamlDotNet、Noto Sans CJK（OFL），各自保留原许可证，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [LICENSES/](LICENSES/)。
+- 本仓库按文件分别授权：上游移植代码和 Apple 移植新增的代码、工具、文档采用 **Apache-2.0**；`addons/wmv_video` 以及两个派生自 Godot / godot-cpp 的文件采用 **MIT**；FFmpeg 采用 **LGPL-2.1-or-later**。完整范围见 [LICENSE](LICENSE)。
 
 《WHITE ALBUM 2》及其全部内容的著作权和商标归 Leaf / AQUAPLUS 所有。本项目与权利人没有任何关联，也未获得其认可。本项目不提供、不分发任何游戏数据，仅供已购买正版游戏的用户在自己的设备上游玩。请支持正版。

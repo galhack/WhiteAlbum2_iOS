@@ -12,22 +12,22 @@ Scope: take over the working four-client Apple port, improve interface usability
 **Goal**: Every core action reachable by touch with comfortable targets.
 **Success Criteria**: A visible menu button and two-finger tap open the pause menu; pause menu offers Auto, Skip, Hide and Title; long-press skip works; small buttons get enlarged hit areas without changing art; backlog scrolls by drag/wheel; launcher text and buttons scale per device; Quit hidden on iOS/tvOS; both landscape orientations allowed.
 **Tests**: Fixture for the hit-area expansion and long-press state; rendered GUI smoke for pause menu access.
-**Status**: In Progress (code complete: 11 touch fixtures pass; rendered menu smoke covers the pause grid, Auto/Skip entries and tap-outside resume on macOS. Two-finger tap was dropped because the first finger already advances text; the visible menu button replaces it. Device layout check pending in Stage 4.)
+**Status**: Complete (user confirmed smooth operation on physical iPhone and iPad).
 
 ## Stage 3: Siri Remote
 **Goal**: Remote reaches Auto/Skip/Hide, scrolls the backlog, shows focus from launch, and Menu at the root returns to the Home screen.
 **Success Criteria**: Engine patch exposes menu passthrough; C# enables it on root screens only.
 **Tests**: Rendered remote smoke updated; physical Apple TV check.
-**Status**: In Progress (engine patch regenerated against the pristine pinned source and applies cleanly; release engine exports wa2_set_menu_passthrough; macOS remote smoke passes. Physical Apple TV check pending.)
+**Status**: In Progress (0.4.0 installed on Apple TV; Menu-to-Home and remote changes await a physical check while the TV is awake).
 
 ## Stage 4: Release builds and devices
 **Goal**: Ship release (optimized) engine templates, release NativeAOT and app icons for macOS, iPhone/iPad/Vision Pro and Apple TV.
 **Success Criteria**: Release packages validate; installed on iPhone 16 Pro Max, iPad Pro, Vision Pro and Apple TV 4K; launch, dialogue, save/load verified.
 **Tests**: package_ipa validation, device launch logs, user visual confirmation.
-**Status**: Not Started
+**Status**: Complete (release packages for iOS, tvOS and Mac built by tools/build_release.sh; installed in place on iPhone, iPad, Vision Pro and Apple TV with data and saves retained; Mac release launches and plays video. Shader baking does not run in headless export and is not claimed.)
 
 ## Stage 5: Documentation and publication
 **Goal**: README with user installation guide; repository pushed to galhack/WhiteAlbum2_iOS after user confirmation.
 **Success Criteria**: .gitignore covers credentials, Claude.md and game data; no game data, lyrics or secrets in the pushed tree or history.
 **Tests**: Pre-push audit of tracked files and history.
-**Status**: Not Started
+**Status**: Complete (README/README_EN, licensing for open source and LGPL, public repository and v0.4.0 release).

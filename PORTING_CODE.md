@@ -15,7 +15,16 @@ licensed under the Apache License, Version 2.0 in
 /wa2.csproj
 /default_bus_layout.tres
 /export_presets.cfg
+/tools/**
+/native/ios/**
+/native/tvos/WA2LocalStorage.mm
+/tests/**
+/assets/app_icon/**
 ```
+
+The last five entries were added by the Apple port. Two Apple port files derived
+from MIT-licensed upstream code keep the MIT License instead; see section 6 of
+`LICENSE`.
 
 Anyone may fork, use, modify, port, and redistribute these covered files in a
 different repository or product. No pull request, separate approval, or
