@@ -103,6 +103,15 @@ On Vision Pro, look at a control and pinch. On Apple TV, pressing Menu on the la
 
 ## Languages and subtitles
 
+The Special Contents catalog displays full novel titles in the selected
+language. In the previous numbered order, these are *His God, Her Savior*;
+*Until the Snow Melts and Falls Again*; *After the Festival ~ Setsuna's Thirty
+Minutes ~*; *Twinkle Snow ~ Reverie ~*; *The Idol Who Forgot How to Sing*;
+*An Unreachable Love, Reached*; *Princess Setsuna's Ordeal and Her Minister's
+Schemes*; *Koharu's Fair Weather After the Typhoon*; and *It's No Longer the
+Season of White Album*. English menu labels identify the stories; an English
+script translation must still be supplied separately.
+
 - **Japanese**: needs `script.pak` and `fnt.pak` from the original game.
 - **Simplified Chinese**: needs CK-GAL's `ck-gal.pak` and `fon.pak`. Special Contents uses `script_cn.pak` and `fon.pak` instead.
 - **English and Traditional Chinese**: need a user-supplied translation; see [APPLE_PORT.md](APPLE_PORT.md).

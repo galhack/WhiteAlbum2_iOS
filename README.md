@@ -197,6 +197,22 @@ xcrun devicectl device copy to --device 设备ID --source ~/Desktop/resource-tra
 
 打开应用后，在启动界面点 **Main / 本体** 或 **Special Contents**，选择语言，再点 **开始游戏**。
 
+Special Contents 的九篇数字小说按下表顺序显示全称。菜单会随所选语言显示中文、日文或英文标题。
+
+| 原菜单编号 | 中文全称 | 日文原名 |
+| --- | --- | --- |
+| 数字小说 1 | 他的神明、那家伙的救世主 | 彼の神様、あいつの救世主 |
+| 数字小说 2 | 雪融化，然后直到再次飘落时 | 雪が解け、そして雪が降るまで |
+| 数字小说 3 | 祭典之后～雪菜的三十分钟～ | 祭りの後～雪菜の三十分～ |
+| 数字小说 4 | Twinkle Snow～梦想～ | Twinkle Snow～夢想～ |
+| 数字小说 5 | 忘却歌声的偶像 | 歌を忘れた偶像（アイドル） |
+| 数字小说 6 | 传达不到的爱恋，传达到了 | 届かない恋、届いた |
+| 数字小说 7 | 雪菜公主的受难与大臣的计谋 | 雪菜姫の受難と大臣の悪巧み |
+| 数字小说 8 | 台风过后的小春日和 | 台風一過の小春日和 |
+| 数字小说 9 | 已经不再是白色相簿的季节了 | もう、ホワイトアルバムの季節じゃない |
+
+日文原名可参照 [AQUAPLUS 特典目录](https://aquaplus.jp/wa2/special_early.html)；中文和英文菜单使用对应译名。
+
 ## 操作方式
 
 | 操作 | 触屏（iPhone / iPad） | Vision Pro | Siri Remote（Apple TV） | 键盘鼠标 |
@@ -226,6 +242,7 @@ xcrun devicectl device copy to --device 设备ID --source ~/Desktop/resource-tra
 
 - 来源：[nxs7/WA2-CHS-Subtitle-Patch](https://github.com/nxs7/WA2-CHS-Subtitle-Patch)，保留原项目 MIT 许可与翻译署名，详见 [SUBTITLE_NOTICE.md](SUBTITLE_NOTICE.md)。
 - 本体：6 组音效字幕和 40 组语音字幕，覆盖原补丁提供的内容。
+- 本体的追加字幕显示在**画面顶部中央**，例如 CC 开头的“峰城广播站”和随后广播采访的对白；普通剧情对话继续使用所选语言的剧本。
 - Special Contents：在篇章列表选择 **广播剧 / Radio dramas**，再选择广播剧与章节。支持原补丁提供的 23 章对白字幕及 5 组歌词，同步显示对白和歌曲文字；支持暂停、重播、下一章及同一广播剧内自动连播。音频仍读取自己的游戏资源。
 - 原补丁未提供『2016 年的除夕』Talk Comment 章节字幕，本版也不会凭空补译。没有字幕的音轨仍可播放。
 - 日文、英文和繁体中文模式不会叠加简体中文字幕。中日文剧本仍需相应的游戏资源／汉化包。

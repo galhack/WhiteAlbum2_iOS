@@ -162,3 +162,72 @@ An initial sandboxed verification failed to create Godot's user-data log
 directory. A later macOS window-restoration prompt blocked the legacy save
 smoke driver; dismissing that prompt allowed the unchanged test to run and
 pass. No game save implementation was changed to work around the harness.
+
+## v0.4.1 build 7 device follow-up (2026-10-18)
+
+The user confirmed Simplified Chinese radio-drama captions and audio on physical
+iPhone, iPad and Vision Pro. The user also confirmed the CC opening station
+caption on iPad. Real scene 2001 playback on Mac verified both the station SE
+caption and the subsequent interview voice caption at the top of the screen.
+
+The settings return failure was reproduced with pointer input: the runtime
+Special Contents catalog covered legacy overlay pages. Bringing each active
+overlay to the front fixes pointer access while preserving stack navigation.
+The regression exercises the catalog settings button, cancellation of the
+default-settings confirmation, and the settings return button. It passes along
+with the existing remote menus/choices regression and C# fixtures; compilation
+reports zero warnings/errors. Fixture restore reported NU1900 while the NuGet
+vulnerability endpoint was unavailable; all fixture execution passed.
+
+Build 7 was development-signed and installed through Xcode on all three physical
+devices. Their actual installed versions report 0.4.1/build 7. Each retained all
+98 resource files with matching paths/sizes. The original manual saves were
+compared byte-for-byte with fresh pre-update backups: 7 on iPhone, 3 on iPad and
+2 on Vision Pro, with no mismatches. After installation, the user confirmed that
+settings open and the on-screen return button works on all three devices,
+including gaze-and-pinch on Vision Pro. This follow-up records the local device
+test build; the earlier published build 6 assets have not been replaced.
+
+## v0.4.1 build 8 full novel titles (2026-10-18)
+
+The shared Special Contents catalog now uses full Japanese, Chinese and English
+titles for all nine digital novels. Story entry points and their order are
+preserved. Title/entry mapping was cross-checked against the local script
+openings and the [translation project's script index](https://www.baka-tsuki.org/project/index.php?title=White_Album_2).
+Original Japanese titles also appear in the [AQUAPLUS special-content catalog](https://aquaplus.jp/wa2/special_early.html).
+In particular, entry 5300 is After the Festival and entry 5200 is Twinkle Snow.
+Both READMEs document the full titles.
+
+C# compilation passed with zero warnings/errors, the existing content fixtures
+and actual catalog click test passed, and all three languages fit the mobile
+catalog width at 30 px. The rendered catalog was reviewed at both scroll ends.
+The existing catalog smoke driver still reports its known ObjectDB cleanup
+warning when quitting immediately after selection; the selection check passes.
+
+Build 8 was signed, installed through Xcode and launched on physical iPhone,
+iPad and Vision Pro. Actual installed versions report 0.4.1/build 8. All 98
+resource files on each device retained matching paths/sizes, and fresh
+pre-update manual saves matched byte-for-byte afterward: 8 on iPhone, 4 on iPad
+and 3 on Vision Pro. These are local test installations; published build 6
+assets have not been replaced by this follow-up.
+
+## Publishing identity and local-only files
+
+Publish to `galhack/WhiteAlbum2_iOS` using the token in `GALHACK`. Bind that
+variable explicitly to the publishing process; do not rely on the machine's
+default GitHub login when several accounts are available. Check that the
+authenticated login is `galhack` before publishing. Keep the token in the
+process environment, never in a remote URL, repository file or printed log.
+
+Git author identity and GitHub authentication are separate. For this repository,
+use `galhack <galhack@protonmail.com>` for new author and committer metadata.
+The earlier v0.4.1 Release and its attachments were uploaded by `galhack`, while
+several source commits inherited the machine's `davidqw` author identity. New
+publication uses the corrected repository-local Git identity and explicit
+`GALHACK` authentication.
+
+The tracked `.gitignore` explicitly excludes both `agents.md` and `AGENTS.md`,
+`IMPLEMENTATION_PLAN.md`, local credential/environment files, signing material,
+original game installations/archives/installers, extracted scripts/images and
+user saves. Ignore rules do not remove files that are already tracked: inspect
+the tracked publish tree and scan for credential values before pushing.

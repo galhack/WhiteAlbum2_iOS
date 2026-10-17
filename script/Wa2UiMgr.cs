@@ -32,6 +32,13 @@ public partial class Wa2UiMgr : Control
 	public VoiceMessageMenu VoiceMessageMenu;
 	private Wa2EngineMain _engine;
 	private Wa2SpecialMenu _specialMenu;
+	private void PushOverlay(Control menu)
+	{
+		// Runtime catalogs and drama players are added after the legacy pages.
+		// Keep the stack's active page above them for drawing and pointer input.
+		MoveChild(menu, -1);
+		UiQueue.Push(menu);
+	}
 	public override void _Ready()
 	{
 
@@ -51,12 +58,12 @@ public partial class Wa2UiMgr : Control
 	public void OpenNovelBackLog()
 	{
 		NovelBackLogMenu.Open();
-		UiQueue.Push(NovelBackLogMenu);
+		PushOverlay(NovelBackLogMenu);
 	}
 	public void OpenBackLog()
 	{
 		BackLogMenu.Open();
-		UiQueue.Push(BackLogMenu);
+		PushOverlay(BackLogMenu);
 	}
 	public void OpenGame()
 	{
@@ -76,41 +83,41 @@ public partial class Wa2UiMgr : Control
 	public void OpenOptionsMenu()
 	{
 		OptionsMenu.Open();
-		UiQueue.Push(OptionsMenu);
+		PushOverlay(OptionsMenu);
 	}
 	public void OpenVoiceMessageMenu()
 	{
 		VoiceMessageMenu.Open();
-		UiQueue.Push(VoiceMessageMenu);
+		PushOverlay(VoiceMessageMenu);
 	}
 	public void OpenSaveMenu()
 	{
 		LoadSaveMenu.Open(DataMode.Save);
-		UiQueue.Push(LoadSaveMenu);
+		PushOverlay(LoadSaveMenu);
 	}
 	public void OpenCGModeMenu()
 	{
 		CGModeMenu.Open();
-		UiQueue.Push(CGModeMenu);
+		PushOverlay(CGModeMenu);
 	}
 	public void OpenSceneReplayMenu()
 	{
 		SceneReplayMenu.Open();
-		UiQueue.Push(SceneReplayMenu);
+		PushOverlay(SceneReplayMenu);
 	}
 	public void OpenBgmModeMenu()
 	{
 		BgmModeMenu.Open();
-		UiQueue.Push(BgmModeMenu);
+		PushOverlay(BgmModeMenu);
 	}
 	public void OpenLoadMenu()
 	{
 		LoadSaveMenu.Open(DataMode.Load);
-		UiQueue.Push(LoadSaveMenu);
+		PushOverlay(LoadSaveMenu);
 	}
 	public void OpenConfirm(string text1, string text2, bool confirm, Action action)
 	{
-		UiQueue.Push(UIConfirm);
+		PushOverlay(UIConfirm);
 		UIConfirm.Open(text1, text2, confirm, action);
 
 	}
@@ -132,7 +139,7 @@ public partial class Wa2UiMgr : Control
 	}
 	public void OpenUICalender()
 	{
-		UiQueue.Push(UICalender);
+		PushOverlay(UICalender);
 		UICalender.Open();
 	}
 	public void JumpScene(Control scene)

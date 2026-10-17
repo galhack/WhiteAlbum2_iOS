@@ -97,6 +97,8 @@ xcuserdata/
 Claude.md
 CLAUDE.md
 AGENTS.md
+agents.md
+IMPLEMENTATION_PLAN.md
 # Machine-specific quickstart notes
 /APPLE_QUICKSTART_zh.md
 # Apple signing material and API keys
@@ -125,3 +127,40 @@ secrets.*
 # Third-party subtitle/lyric translations without redistribution permission;
 # place your own copy at <game data>/subtitles/zh-Hans.yaml instead
 /assets/sub.yaml
+
+# Credentials copied from local tools or shell configuration
+.git-credentials
+.netrc
+.credentials/
+.secrets/
+.aws/
+.ssh/
+secrets/
+credentials.json
+credentials.*
+*credentials*.json
+*credentials*.yaml
+*credentials*.yml
+*token*.json
+*token*.txt
+*token*.yaml
+*token*.yml
+*.token.*
+*.pat
+/GALHACK
+/GALHACK.*
+
+# Original game installations, installers and extracted script/image data
+/wa2/
+/wa2SC/
+*.[pP][aA][kK]
+*.[eE][xX][eE]
+*.[mM][sS][iI]
+*.[iI][sS][oO]
+*.[mM][dD][fF]
+*.[mM][dD][sS]
+*.[rR][aA][rR]
+*.7z
+*.[bB][nN][rR]
+*.[tT][gG][aA]
+*.[sS][aA][vV]
