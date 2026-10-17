@@ -12,11 +12,15 @@ These files are contributor-authored resource readers, runtime logic, shaders, G
 
 ## Subtitle data
 
-- Location: `assets/sub.yaml`
-- License: mixed third-party content; not covered by Apache-2.0
-- Detailed notice: `SUBTITLE_NOTICE.md`
+- Source: [nxs7/WA2-CHS-Subtitle-Patch](https://github.com/nxs7/WA2-CHS-Subtitle-Patch)
+- Revision: `bb3cbc2f459549f8afbcb56cafd4b861d763bd29`
+- Location: `assets/subtitles/main.zh-Hans.yaml`, `assets/subtitles/special.zh-Hans.yaml`
+- Upstream license: MIT, copyright (c) 2022 nxs7
+- Full notice: `LICENSES/WA2-CHS-Subtitle-Patch-MIT.txt`
+- Provenance and translation credits: `SUBTITLE_NOTICE.md`
 
-Embedded comments attribute portions to 萌娘百科 (Moegirlpedia) and CK-GAL汉化组. Moegirlpedia states that its text is generally available under CC BY-NC-SA 3.0 CN unless otherwise noted, but the exact source pages and any underlying third-party lyrics or dialogue are not fully documented in this repository. No redistribution license has been identified for the CK-GAL portions. Redistributors must verify, replace, or remove this data as appropriate.
+These files retain their upstream notice and are not relicensed as Apache-2.0.
+The old mixed-source `assets/sub.yaml` is not distributed.
 
 ## WMV Video GDExtension
 

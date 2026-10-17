@@ -25,6 +25,11 @@ longer tracked in the Apple port repository because its lyric translations lack
 redistribution permission. Users may place their own copy at
 `<game data>/subtitles/zh-Hans.yaml`. See `SUBTITLE_NOTICE.md`.
 
+For v0.4.1, the user-requested upstream WA2-CHS-Subtitle-Patch datasets under
+`assets/subtitles/` are explicitly included with their source revision, original
+credits and upstream MIT notice in `SUBTITLE_NOTICE.md`. This exception does not
+include the old `assets/sub.yaml`, original game archives or extracted media.
+
 The project uses Godot's bundled default font for its normal UI, so the excluded Alibaba font is not required by a clean clone. Animation `.tres` files may be committed when they are contributor-authored configuration and do not embed original images, audio, dialogue, or other game data.
 
 The `.gitignore` file enforces the common paths and extensions. Before every push, review `git status` and the staged diff. A file being technically uploadable does not mean its copyright owner has authorized redistribution.

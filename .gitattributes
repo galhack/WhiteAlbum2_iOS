@@ -1,2 +1,5 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Preserve the supplied subtitle data byte-for-byte, including upstream CRLF.
+assets/subtitles/*.yaml -text whitespace=cr-at-eol

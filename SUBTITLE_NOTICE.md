@@ -1,31 +1,32 @@
-# Subtitle Data Notice
+# Bundled Chinese subtitles (v0.4.1)
 
-`assets/sub.yaml` contains mixed third-party subtitle and translation data. It
-is not covered by `PORTING_CODE.md` and, in the Apple port repository, it is not
-distributed at all: the file is listed in `.gitignore`. The engine loads an
-optional user-supplied copy from `<game data>/subtitles/zh-Hans.yaml` (or a
-local, untracked `assets/sub.yaml` for personal builds).
+The following files are unmodified copies from
+[nxs7/WA2-CHS-Subtitle-Patch](https://github.com/nxs7/WA2-CHS-Subtitle-Patch),
+revision `bb3cbc2f459549f8afbcb56cafd4b861d763bd29`:
 
-Known embedded source credits include:
+| Bundled file | Upstream source | Coverage |
+| --- | --- | --- |
+| `assets/subtitles/main.zh-Hans.yaml` | `script/sub.yaml` | 6 sound-effect and 40 voice entries |
+| `assets/subtitles/special.zh-Hans.yaml` | `SpecialContents/script/sub.yaml` | 23 drama chapters and 5 song entries |
 
-- 萌娘百科 (Moegirlpedia), identified by comments within the YAML file;
-- CK-GAL汉化组, identified by comments within the YAML file.
+The upstream project declares MIT licensing, copyright (c) 2022 nxs7. Its full
+notice is retained in `LICENSES/WA2-CHS-Subtitle-Patch-MIT.txt`, reproduced in
+the application's Licenses screen and release notices. These data files are
+separate from the Apple port's Apache-2.0 source code.
 
-Moegirlpedia's copyright information states that its text is generally offered
-under Creative Commons Attribution-NonCommercial-ShareAlike 3.0 China
-(CC BY-NC-SA 3.0 CN) unless otherwise noted. Reuse requires attribution,
-noncommercial use, and share-alike distribution. The repository does not record
-the exact Moegirlpedia source-page URLs or revisions, and some quoted lyrics,
-dialogue, or other third-party works may remain subject to their original
-rightsholders rather than that site-wide license.
+Original upstream credits are retained: the main patch credits the English
+translation by [TodokanaiTL/WA2EnglishPatch](https://github.com/TodokanaiTL/WA2EnglishPatch);
+YAML comments credit 萌娘百科 (Moegirlpedia) for certain lyrics. No license to the
+underlying WHITE ALBUM 2 audio, lyrics or other original game material is granted
+by this port. Users provide their own purchased game resources.
 
-- Copyright information: https://moegirl.uk/index.php?title=萌娘百科:著作权信息
-- CC BY-NC-SA 3.0 CN: https://creativecommons.org/licenses/by-nc-sa/3.0/cn/
+These are the upstream patch's supplied captions, not a complete new game
+translation. As documented upstream, Special Contents does not include captions
+for the 2016 New Year's Eve Talk Comment chapter.
 
-No explicit redistribution license has been identified for the portions
-credited to CK-GAL汉化组. The repository therefore grants no permission for
-those portions.
+Only Simplified Chinese mode enables these captions. User-provided files at
+`<game data>/subtitles/zh-Hans.yaml` override the corresponding edition's bundled
+file. Original main-game and Special Contents datasets are kept separate.
 
-Anyone redistributing this repository must independently verify the relevant
-rights and attribution. An Apache-only or commercial port should remove or
-replace `assets/sub.yaml` unless the distributor obtains sufficient permission.
+The old local `assets/sub.yaml` mixed-source file remains excluded from Git and
+release packages. It is not the source of these newly bundled files.

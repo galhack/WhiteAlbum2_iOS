@@ -135,6 +135,12 @@ public partial class Wa2RemoteNavigation : Control
         if (owner is TextEdit && owner.IsVisibleInTree()) return;
         if (owner is OptionButton option && option.GetPopup().Visible) return;
         if (owner != null && owner.GetWindow() != GetWindow()) return;
+        if (input is InputEventKey { Pressed: true, Echo: false, Keycode: Key.P } && ActiveScope() is Wa2DramaPlayer drama)
+        {
+            drama.TogglePause();
+            GetViewport().SetInputAsHandled();
+            return;
+        }
         // Play/Pause toggles auto-advance while reading; elsewhere it acts as Menu.
         if (input is InputEventKey { Pressed: true, Echo: false, Keycode: Key.P } && ActiveScope() == null &&
             Wa2EngineMain.Engine is { State: Wa2EngineMain.GameState.GAME } reading && !reading.VideoPlayer.IsPlaying)
@@ -210,6 +216,7 @@ public partial class Wa2RemoteNavigation : Control
         if (game == null || game.UiMgr.UiQueue.Count == 0) return;
         var menu = game.UiMgr.UiQueue.Peek();
         if (menu is Wa2RemotePauseMenu pause) pause.Close();
+        else if (menu is Wa2DramaPlayer drama) drama.Close();
         else if (menu is Wa2LocalSaveMenu localSaves) localSaves.Close();
         else if (menu is UIConfirm confirm) confirm.Close();
         else if (menu is TitleMenu title) title.RemoteBack();

@@ -27,6 +27,11 @@ public partial class Wa2SpecialMenu : PanelContainer
             button.Pressed += () => Start(entry.Script);
             entries.AddChild(button);
         }
+        AddButton(entries, "广播剧 / Radio dramas · 中文字幕", () => {
+            var player = new Wa2DramaPlayer();
+            Wa2EngineMain.Engine.UiMgr.AddChild(player);
+            player.Open();
+        });
         var controls = new HBoxContainer { Alignment = BoxContainer.AlignmentMode.Center };
         column.AddChild(controls);
         AddButton(controls, "Load / 读档 / ロード", () => Wa2EngineMain.Engine.UiMgr.OpenLoadMenu());

@@ -6,7 +6,7 @@ Play *WHITE ALBUM 2* natively on iPhone, iPad, Apple Vision Pro, Apple TV and Ma
 
 This is an **engine port** built on [dorakyuraduang/wa2-godot](https://github.com/dorakyuraduang/wa2-godot), a Godot 4 .NET reimplementation of the original engine. It adds Apple platform support, touch and Siri Remote controls, and performance work.
 
-> **Neither this repository nor the app packages contain any game content.** Scripts, images, audio, movies and fonts are read from your own purchased copy of the PC game. Please buy the game.
+> **The app packages contain no original game resources.** Scripts, images, audio, movies and game fonts are read from your purchased copy of the PC game. Version 0.4.1 bundles separate third-party Chinese subtitle data; see [subtitle provenance and licensing](SUBTITLE_NOTICE.md).
 
 ## Supported devices
 
@@ -18,7 +18,7 @@ This is an **engine port** built on [dorakyuraduang/wa2-godot](https://github.co
 | Apple TV | tvOS 17 | Separate native tvOS app, Siri Remote | Apple TV 4K (3rd gen, 2022) · tvOS 17.6 |
 | Mac | macOS 12, Apple silicon | Native app, windowed or full screen | MacBook Pro (M1 Max) · macOS 26.6 |
 
-All builds are native ARM64: C# is compiled ahead of time with NativeAOT and rendering uses Metal. No JIT or jailbreak is needed.
+All builds target Apple silicon/ARM64. iPhone, iPad, Vision Pro and Apple TV use NativeAOT and need no AltJIT or jailbreak. The Mac app includes its .NET runtime and uses the OpenGL compatibility renderer.
 
 ## What you need
 
@@ -46,13 +46,15 @@ Do not nest folders. `Wa2Res` must directly contain `BGM.PAK`, `IC/` and so on.
 
 ## 2. Get the app package
 
+Current release: [v0.4.1](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1). The links below always download the latest stable release.
+
 Download from [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases):
 
-- `WA2-iPhone-iPad.ipa`: iPhone/iPad, unsigned. Sign it with your own Apple ID in Sideloadly.
-- `WA2-AppleTV.ipa`: Apple TV, unsigned.
-- `WA2-macOS.dmg`: Mac with Apple silicon.
-- `ffmpeg-7.1.5.tar.xz`: the corresponding FFmpeg source, provided as the LGPL requires. You do not need it to play.
-- `SHA256SUMS.txt`: checksums.
+- [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa): iPhone/iPad, unsigned. Sign it with your own Apple ID in Sideloadly.
+- [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-AppleTV.ipa): Apple TV, unsigned.
+- [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg): Mac with Apple silicon.
+- [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz): the corresponding FFmpeg source, provided as the LGPL requires. You do not need it to play.
+- [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt): checksums.
 
 The packages contain no game content. You can also [build them from source](#building-from-source).
 
@@ -105,7 +107,15 @@ On Vision Pro, look at a control and pinch. On Apple TV, pressing Menu on the la
 - **Simplified Chinese**: needs CK-GAL's `ck-gal.pak` and `fon.pak`. Special Contents uses `script_cn.pak` and `fon.pak` instead.
 - **English and Traditional Chinese**: need a user-supplied translation; see [APPLE_PORT.md](APPLE_PORT.md).
 
-Song and voice subtitles are optional and **not included**, because their lyric translations lack redistribution permission. If you have a subtitle YAML, put it at `<data folder>/subtitles/zh-Hans.yaml`.
+**v0.4.1 bundles Simplified Chinese subtitles on every Apple client.** Select Simplified Chinese to enable them; no extra files or Windows DLL are needed.
+
+The data comes from [nxs7/WA2-CHS-Subtitle-Patch](https://github.com/nxs7/WA2-CHS-Subtitle-Patch), with its MIT notice and original translation credits retained. See [SUBTITLE_NOTICE.md](SUBTITLE_NOTICE.md).
+
+- Main game: the upstream patch's 6 sound-effect and 40 voice entries.
+- Special Contents: choose **Radio dramas** in the catalog, then select a drama/chapter. The upstream data supplies dialogue for 23 chapters and 5 song entries. Dialogue and lyrics can display simultaneously. Pause, restart, next chapter and automatic playback within one drama are supported. Audio still comes from your game resources.
+- The upstream patch does not subtitle the *2016 New Year's Eve* Talk Comment chapter. That audio remains playable without invented captions.
+- Japanese, English and Traditional Chinese modes do not display Simplified Chinese subtitles.
+- Optional overrides go at `<data folder>/subtitles/zh-Hans.yaml`. The main game accepts upstream `soundEffect/voice` and legacy `soundSubtitle/voiceSubtitle`; Special Contents accepts `voiceDrama/song`. The two editions never share their subtitle timelines.
 
 ## Saves
 
@@ -160,4 +170,4 @@ Licensing is per file:
 
 [LICENSE](LICENSE) gives the full scope.
 
-*WHITE ALBUM 2* and all of its content are © Leaf / AQUAPLUS. This project is not affiliated with or endorsed by the rights holders and distributes no game data.
+*WHITE ALBUM 2* and all of its content are © Leaf / AQUAPLUS. This project is not affiliated with or endorsed by the rights holders and distributes no original game resources. Bundled third-party subtitles retain their separate notices.

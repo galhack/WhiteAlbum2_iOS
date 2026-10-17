@@ -110,3 +110,11 @@ Contributors must submit only material they created themselves or are authorized
 to distribute. Contributions to paths listed in `PORTING_CODE.md` are provided
 under Apache-2.0. Contributions to `addons/wmv_video` are provided under that
 component's MIT License unless a file clearly states otherwise.
+
+8. Bundled third-party subtitles
+
+`assets/subtitles/main.zh-Hans.yaml` and `assets/subtitles/special.zh-Hans.yaml`
+come from nxs7/WA2-CHS-Subtitle-Patch, which declares MIT licensing, copyright
+(c) 2022 nxs7. See `LICENSES/WA2-CHS-Subtitle-Patch-MIT.txt` and
+`SUBTITLE_NOTICE.md` for source revision and original translation credits.
+These data files are not covered by the Apple port's Apache-2.0 grant.

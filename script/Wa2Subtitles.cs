@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using YamlDotNet.RepresentationModel;
 
 public sealed class ContentSegment
@@ -25,6 +26,15 @@ public sealed class SubtitleRoot
 {
     public List<SoundSubtitle> SoundSubtitle { get; set; } = new();
     public List<VoiceSubtitle> VoiceSubtitle { get; set; } = new();
+    public List<ChapterSubtitle> VoiceDrama { get; set; } = new();
+    public List<ChapterSubtitle> Song { get; set; } = new();
+}
+
+public sealed class ChapterSubtitle
+{
+    public int Id { get; set; }
+    public int Chapter { get; set; }
+    public List<ContentSegment> Content { get; set; } = new();
 }
 
 // Parse known fields explicitly; no reflection, runtime code generation or type discovery.
@@ -37,18 +47,29 @@ public static class Wa2Subtitles
         if (yaml.Documents.Count != 1 || yaml.Documents[0].RootNode is not YamlMappingNode root)
             throw new InvalidDataException("Subtitle data must contain one YAML mapping.");
         var result = new SubtitleRoot();
-        foreach (YamlNode node in Sequence(root, "soundSubtitle"))
+        foreach (YamlNode node in Sequence(root, "soundEffect").Concat(Sequence(root, "soundSubtitle")))
         {
             var item = Mapping(node);
             result.SoundSubtitle.Add(new SoundSubtitle { Id = Integer(item, "id"), Content = Content(item) });
         }
-        foreach (YamlNode node in Sequence(root, "voiceSubtitle"))
+        foreach (YamlNode node in Sequence(root, "voice").Concat(Sequence(root, "voiceSubtitle")))
         {
             var item = Mapping(node);
             result.VoiceSubtitle.Add(new VoiceSubtitle { Id = Integer(item, "id"), Scene = Integer(item, "scene"), Content = Content(item) });
         }
+        foreach (YamlNode node in Sequence(root, "voiceDrama")) result.VoiceDrama.Add(Chapter(Mapping(node)));
+        foreach (YamlNode node in Sequence(root, "song")) result.Song.Add(Chapter(Mapping(node)));
         return result;
     }
+
+    private static ChapterSubtitle Chapter(YamlMappingNode item) => new() {
+        Id = Integer(item, "id"), Chapter = Integer(item, "chapter"), Content = Content(item)
+    };
+
+    // Half-open intervals avoid stale captions at exact boundaries and gaps.
+    // Re-evaluate from the audio clock, so pause, loop and seek need no timers.
+    public static string TextAt(IReadOnlyList<ContentSegment> content, double milliseconds) =>
+        string.Join("\n", content.Where(s => milliseconds >= s.Begin && milliseconds < s.End).Select(s => s.Text));
 
     private static List<ContentSegment> Content(YamlMappingNode parent)
     {
@@ -56,7 +77,10 @@ public static class Wa2Subtitles
         foreach (YamlNode node in Sequence(parent, "content"))
         {
             var item = Mapping(node);
-            content.Add(new ContentSegment { Begin = Integer(item, "begin"), End = Integer(item, "end"), Text = Scalar(item, "text") });
+            var segment = new ContentSegment { Begin = Integer(item, "begin"), End = Integer(item, "end"), Text = Scalar(item, "text") };
+            if (segment.Begin < 0 || segment.End <= segment.Begin)
+                throw new InvalidDataException($"Invalid subtitle interval: {segment.Begin}..{segment.End}.");
+            content.Add(segment);
         }
         return content;
     }

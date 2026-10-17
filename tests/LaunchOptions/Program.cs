@@ -125,6 +125,39 @@ try { Wa2Subtitles.Parse("[wrong, root]"); throw new Exception("Invalid subtitle
 catch (InvalidDataException) { }
 Console.WriteLine("7 static subtitle parser cases passed.");
 
+var patchSubs = Wa2Subtitles.Parse("""
+soundEffect: [{id: 1, content: [{begin: 100, end: 200, text: se}]}]
+voice: [{scene: 1001, id: 2, content: []}]
+voiceDrama: [{id: 80, chapter: 0, content: [{begin: 100, end: 200, text: drama}]}]
+song: [{id: 80, chapter: 0, content: [{begin: 150, end: 250, text: song}]}]
+""");
+Equal(1, patchSubs.SoundSubtitle[0].Id);
+Equal(1001, patchSubs.VoiceSubtitle[0].Scene);
+Equal(80, patchSubs.VoiceDrama[0].Id);
+Equal(0, patchSubs.Song[0].Chapter);
+Equal("", Wa2Subtitles.TextAt(patchSubs.SoundSubtitle[0].Content, 99));
+Equal("se", Wa2Subtitles.TextAt(patchSubs.SoundSubtitle[0].Content, 100));
+Equal("", Wa2Subtitles.TextAt(patchSubs.SoundSubtitle[0].Content, 200));
+Equal("drama", Wa2Subtitles.TextAt(patchSubs.VoiceDrama[0].Content, 175));
+Equal("song", Wa2Subtitles.TextAt(patchSubs.Song[0].Content, 175));
+Equal("", Wa2Subtitles.TextAt(patchSubs.Song[0].Content, 300));
+Equal("", Wa2Subtitles.TextAt(patchSubs.Song[0].Content, 0)); // Seek back clears text.
+try { Wa2Subtitles.Parse("voice: [{id: 2, content: []}]"); throw new Exception("Missing scene accepted"); }
+catch (InvalidDataException) { }
+try { Wa2Subtitles.Parse("soundEffect: [{id: 2, content: [{begin: 20, end: 10, text: bad}]}]"); throw new Exception("Invalid timing accepted"); }
+catch (InvalidDataException) { }
+Console.WriteLine("13 upstream subtitle schema/timeline cases passed.");
+
+if (args.Length == 1)
+{
+    foreach (string edition in new[] { "main", "special" })
+    {
+        var bundled = Wa2Subtitles.Parse(File.ReadAllText(Path.Combine(args[0], edition + ".zh-Hans.yaml")));
+        Console.WriteLine($"Bundled {edition}: SE={bundled.SoundSubtitle.Count}, voice={bundled.VoiceSubtitle.Count}, drama={bundled.VoiceDrama.Count}, song={bundled.Song.Count}");
+        Equal(true, edition == "main" ? bundled.VoiceSubtitle.Count > 0 : bundled.VoiceDrama.Count > 0);
+    }
+}
+
 Equal("script_cn.pak", Wa2Content.ScriptArchive(true, "zh-Hans"));
 Equal("ck-gal.pak", Wa2Content.ScriptArchive(false, "zh-Hans"));
 Equal("script.pak", Wa2Content.ScriptArchive(true, "ja"));

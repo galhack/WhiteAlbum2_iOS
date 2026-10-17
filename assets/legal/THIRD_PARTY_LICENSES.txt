@@ -2,7 +2,11 @@ WHITE ALBUM 2 Apple port - open-source notices
 ===============================================
 
 Source code of this application: https://github.com/galhack/WhiteAlbum2_iOS
-No WHITE ALBUM 2 game data is included; players supply their own purchased copy.
+No original game archives or media are included; players supply their purchased copy.
+Chinese subtitle YAML from nxs7/WA2-CHS-Subtitle-Patch is bundled separately.
+Source: https://github.com/nxs7/WA2-CHS-Subtitle-Patch
+Pinned revision: bb3cbc2f459549f8afbcb56cafd4b861d763bd29
+See SUBTITLE_NOTICE.md for provenance and original translation credits.
 
 FFmpeg (LGPL-2.1-or-later)
 --------------------------
@@ -27,6 +31,32 @@ published at the address above, so you can rebuild it with a modified FFmpeg
 device. You may modify this application for your own use and reverse
 engineer it to debug such modifications.
 
+
+==============================================================================
+WA2-CHS-Subtitle-Patch - MIT License
+==============================================================================
+
+MIT License
+
+Copyright (c) 2022 nxs7
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ==============================================================================
 FFmpeg - GNU Lesser General Public License 2.1

@@ -10,7 +10,11 @@ HEADER = f"""WHITE ALBUM 2 Apple port - open-source notices
 ===============================================
 
 Source code of this application: {REPOSITORY}
-No WHITE ALBUM 2 game data is included; players supply their own purchased copy.
+No original game archives or media are included; players supply their purchased copy.
+Chinese subtitle YAML from nxs7/WA2-CHS-Subtitle-Patch is bundled separately.
+Source: https://github.com/nxs7/WA2-CHS-Subtitle-Patch
+Pinned revision: bb3cbc2f459549f8afbcb56cafd4b861d763bd29
+See SUBTITLE_NOTICE.md for provenance and original translation credits.
 
 FFmpeg (LGPL-2.1-or-later)
 --------------------------
@@ -38,6 +42,7 @@ engineer it to debug such modifications.
 """
 
 PARTS = [
+    ("WA2-CHS-Subtitle-Patch - MIT License", "LICENSES/WA2-CHS-Subtitle-Patch-MIT.txt"),
     ("FFmpeg - GNU Lesser General Public License 2.1", "LICENSES/LGPL-2.1-or-later.txt"),
     ("Godot Engine - MIT License", "LICENSES/Godot-MIT.txt"),
     ("Godot Engine - third-party components", "LICENSES/Godot-COPYRIGHT.txt"),

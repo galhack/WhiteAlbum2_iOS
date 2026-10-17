@@ -6,29 +6,34 @@
 
 本项目是一个**引擎移植**：基于 [dorakyuraduang/wa2-godot](https://github.com/dorakyuraduang/wa2-godot) 的 Godot 4 .NET 重写版引擎，增加了 Apple 平台适配、触屏与遥控器操作，并做了性能优化。
 
-> **本仓库和安装包都不含任何游戏内容。** 剧本、图像、音频、影片和字体都需要从你自己购买的正版 PC 游戏中读取。请先购买正版游戏。
+> **安装包不含原版游戏资源。** 剧本、图像、音频、影片和游戏字体都需要从你购买的正版 PC 游戏中读取。v0.4.1 内置独立的第三方中文字幕数据，来源与许可见[字幕说明](SUBTITLE_NOTICE.md)。
 
 ---
 
 ## 目录
 
-- [支持的设备](#支持的设备)
-- [准备工作](#准备工作)
-- [第一步：准备游戏数据](#第一步准备游戏数据)
-- [第二步：获取安装包](#第二步获取安装包)
-- [第三步：安装到设备](#第三步安装到设备)
-  - [iPhone / iPad（Sideloadly）](#iphone--ipadsideloadly)
-  - [Apple Vision Pro（Xcode）](#apple-vision-proxcode)
-  - [Apple TV（Xcode）](#apple-tvxcode)
-  - [Mac](#mac)
-- [第四步：导入游戏数据](#第四步导入游戏数据)
-- [操作方式](#操作方式)
-- [语言与字幕](#语言与字幕)
-- [存档与章节解锁](#存档与章节解锁)
-- [常见问题](#常见问题)
-- [从源码构建](#从源码构建)
-- [FFmpeg 与 LGPL](#ffmpeg-与-lgpl)
-- [致谢与许可](#致谢与许可)
+- [WHITE ALBUM 2 · Apple 移植版](#white-album-2--apple-移植版)
+  - [目录](#目录)
+  - [支持的设备](#支持的设备)
+  - [准备工作](#准备工作)
+  - [第一步：准备游戏数据](#第一步准备游戏数据)
+  - [第二步：获取安装包](#第二步获取安装包)
+  - [第三步：安装到设备](#第三步安装到设备)
+    - [iPhone / iPad（Sideloadly）](#iphone--ipadsideloadly)
+    - [Apple Vision Pro（Xcode）](#apple-vision-proxcode)
+    - [Apple TV（Xcode）](#apple-tvxcode)
+    - [Mac](#mac)
+  - [第四步：导入游戏数据](#第四步导入游戏数据)
+    - [iPhone / iPad](#iphone--ipad)
+    - [Vision Pro 和 Apple TV](#vision-pro-和-apple-tv)
+    - [开始游戏](#开始游戏)
+  - [操作方式](#操作方式)
+  - [语言与字幕](#语言与字幕)
+  - [存档与章节解锁](#存档与章节解锁)
+  - [常见问题](#常见问题)
+  - [从源码构建](#从源码构建)
+  - [FFmpeg 与 LGPL](#ffmpeg-与-lgpl)
+  - [致谢与许可](#致谢与许可)
 
 ---
 
@@ -42,7 +47,7 @@
 | Apple TV | tvOS 17 | 独立的 tvOS 原生应用，Siri Remote 操作 | Apple TV 4K（第三代，2022）· tvOS 17.6 |
 | Mac | macOS 12，Apple 芯片 | 原生应用，窗口或全屏 | MacBook Pro（M1 Max）· macOS 26.6 |
 
-所有版本都是 ARM64 原生代码（C# 通过 NativeAOT 提前编译，渲染走 Metal），不需要 JIT，也不需要越狱。
+所有版本均面向 Apple Silicon／ARM64。iPhone、iPad、Vision Pro 和 Apple TV 的 C# 使用 NativeAOT，不需要 AltJIT 或越狱；Mac 版附带 .NET 运行时，采用 OpenGL 兼容渲染。
 
 ## 准备工作
 
@@ -87,17 +92,19 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 ## 第二步：获取安装包
 
+当前版本：[v0.4.1](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1)。下列直链始终获取最新正式版。
+
 在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
 | 文件 | 用途 |
 | --- | --- |
-| `WA2-iPhone-iPad.ipa` | iPhone / iPad，未签名，用 Sideloadly 以你自己的 Apple ID 签名安装 |
-| `WA2-AppleTV.ipa` | Apple TV，未签名 |
-| `WA2-macOS.dmg` | Mac（Apple 芯片） |
-| `ffmpeg-7.1.5.tar.xz` | 应用所用 FFmpeg 的对应源码（LGPL 要求随附，玩游戏用不到） |
-| `SHA256SUMS.txt` | 校验值 |
+| [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa) | iPhone / iPad，未签名，用 Sideloadly 以你自己的 Apple ID 签名安装 |
+| [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-AppleTV.ipa) | Apple TV，未签名 |
+| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg) | Mac（Apple 芯片） |
+| [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz) | 应用所用 FFmpeg 的对应源码（LGPL 要求随附，玩游戏用不到） |
+| [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt) | 校验值 |
 
-安装包里**不含任何游戏内容**。也可以按[从源码构建](#从源码构建)自己编译。
+安装包里**不含原版游戏资源**（内置独立的第三方中文字幕）。也可以按[从源码构建](#从源码构建)自己编译。
 
 ## 第三步：安装到设备
 
@@ -215,7 +222,14 @@ xcrun devicectl device copy to --device 设备ID --source ~/Desktop/resource-tra
 | 简体中文 | CK-GAL 汉化补丁的 `ck-gal.pak` + `fon.pak`（Special Contents 用 `script_cn.pak` + `fon.pak`） |
 | English / 繁體中文 | 需要自备语言包和配置文件，格式见 [APPLE_PORT.md](APPLE_PORT.md) |
 
-**歌曲和语音字幕（可选）**：本仓库不附带字幕文件（其中的歌词译文没有再分发授权）。如果你有简体中文字幕 YAML（例如 WA2 字幕补丁里的 `sub.yaml`），可以把它命名为 `zh-Hans.yaml`，放进游戏数据文件夹下的 `subtitles/` 目录，例如 `Wa2Res/subtitles/zh-Hans.yaml`。
+**v0.4.1 已内置简体中文字幕**，iPhone、iPad、Vision Pro、Apple TV 和 Mac 使用同一套字幕实现，选择**简体中文**后自动启用，无需额外复制字幕或安装 Windows DLL。
+
+- 来源：[nxs7/WA2-CHS-Subtitle-Patch](https://github.com/nxs7/WA2-CHS-Subtitle-Patch)，保留原项目 MIT 许可与翻译署名，详见 [SUBTITLE_NOTICE.md](SUBTITLE_NOTICE.md)。
+- 本体：6 组音效字幕和 40 组语音字幕，覆盖原补丁提供的内容。
+- Special Contents：在篇章列表选择 **广播剧 / Radio dramas**，再选择广播剧与章节。支持原补丁提供的 23 章对白字幕及 5 组歌词，同步显示对白和歌曲文字；支持暂停、重播、下一章及同一广播剧内自动连播。音频仍读取自己的游戏资源。
+- 原补丁未提供『2016 年的除夕』Talk Comment 章节字幕，本版也不会凭空补译。没有字幕的音轨仍可播放。
+- 日文、英文和繁体中文模式不会叠加简体中文字幕。中日文剧本仍需相应的游戏资源／汉化包。
+- 如需自定义，将 YAML 放到 `<游戏目录>/subtitles/zh-Hans.yaml`，优先于对应版本的内置字幕。本体支持原项目的 `soundEffect/voice` 及旧版 `soundSubtitle/voiceSubtitle` 格式；Special Contents 支持 `voiceDrama/song`。两套资源与时间轴互不混用。
 
 ## 存档与章节解锁
 
@@ -293,4 +307,4 @@ Apple TV 版的对应步骤见 [APPLE_TV.md](APPLE_TV.md)。你可以为自用�
 - [Godot Engine](https://godotengine.org/)（MIT）、[FFmpeg](https://ffmpeg.org/)（LGPL 2.1+）、godot-cpp、.NET 运行时、YamlDotNet、Noto Sans CJK（OFL），各自保留原许可证，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [LICENSES/](LICENSES/)。
 - 本仓库按文件分别授权：上游移植代码和 Apple 移植新增的代码、工具、文档采用 **Apache-2.0**；`addons/wmv_video` 以及两个派生自 Godot / godot-cpp 的文件采用 **MIT**；FFmpeg 采用 **LGPL-2.1-or-later**。完整范围见 [LICENSE](LICENSE)。
 
-《WHITE ALBUM 2》及其全部内容的著作权和商标归 Leaf / AQUAPLUS 所有。本项目与权利人没有任何关联，也未获得其认可。本项目不提供、不分发任何游戏数据，仅供已购买正版游戏的用户在自己的设备上游玩。请支持正版。
+《WHITE ALBUM 2》及其全部内容的著作权和商标归 Leaf / AQUAPLUS 所有。本项目与权利人没有任何关联，也未获得其认可。本项目不分发原版游戏资源；内置的第三方字幕保留各自的来源与许可。引擎仅供已购买正版游戏的用户在自己的设备上游玩。请支持正版。

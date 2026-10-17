@@ -75,8 +75,8 @@ public partial class Wa2SoundMgr : Node
 	public void PlayVoiceMessage(int idx)
 	{
 		Wa2VoiceAudio audio = _voiceAudios[0];
-		_engine.SubtitleMgr.ListenVoice(9500, idx, audio);
 		audio.PlaySound(Wa2Resource.GetOggStream(string.Format("9500_000{0:D1}_{1:D2}.ogg", idx, idx + 1)), false, 255);
+		_engine.SubtitleMgr.ListenVoice(9500, idx, audio);
 
 	}
 	public void PlayVoice(int label, int id, int chr, int volume = 256, bool loop = false, int channel = 0)
@@ -125,11 +125,7 @@ public partial class Wa2SoundMgr : Node
 				}
 				audio.PlaySound(Wa2Resource.GetVoiceStream(label, id, chr), false, volume);
 				(audio.Stream as AudioStreamOggVorbis).Loop = loop;
-				if (channel != 0)
-				{
-					_engine.SubtitleMgr.ListenVoice(label, id, audio);
-					// audio.Playing = false;
-				}
+				_engine.SubtitleMgr.ListenVoice(label, id, audio);
 			}
 		}
 	}
