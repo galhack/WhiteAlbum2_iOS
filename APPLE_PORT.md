@@ -185,8 +185,8 @@ devices. Their actual installed versions report 0.4.1/build 7. Each retained all
 compared byte-for-byte with fresh pre-update backups: 7 on iPhone, 3 on iPad and
 2 on Vision Pro, with no mismatches. After installation, the user confirmed that
 settings open and the on-screen return button works on all three devices,
-including gaze-and-pinch on Vision Pro. This follow-up records the local device
-test build; the earlier published build 6 assets have not been replaced.
+including gaze-and-pinch on Vision Pro. This records the initial local build 7
+verification, before the later Build 8 replacement release described below.
 
 ## v0.4.1 build 8 full novel titles (2026-10-18)
 
@@ -208,8 +208,8 @@ Build 8 was signed, installed through Xcode and launched on physical iPhone,
 iPad and Vision Pro. Actual installed versions report 0.4.1/build 8. All 98
 resource files on each device retained matching paths/sizes, and fresh
 pre-update manual saves matched byte-for-byte afterward: 8 on iPhone, 4 on iPad
-and 3 on Vision Pro. These are local test installations; published build 6
-assets have not been replaced by this follow-up.
+and 3 on Vision Pro. These checks were performed on local test installations
+before preparing the replacement release described below.
 
 ## Publishing identity and local-only files
 
@@ -231,3 +231,29 @@ The tracked `.gitignore` explicitly excludes both `agents.md` and `AGENTS.md`,
 original game installations/archives/installers, extracted scripts/images and
 user saves. Ignore rules do not remove files that are already tracked: inspect
 the tracked publish tree and scan for credential values before pushing.
+
+## v0.4.1 Build 8 replacement release (2026-10-18)
+
+The existing [v0.4.1 Release](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1)
+now serves Build 8 using the original asset filenames. All three optimized
+application packages report 0.4.1/build 8. The tvOS staging tool reads the shared
+Apple export metadata to keep its build number aligned. This release includes
+the verified settings return fix and full Special Contents novel titles.
+
+Publication explicitly used GALHACK; release/asset uploaders, source author and
+committer, and the updated annotated tag's tagger are galhack. The v0.4.1 tag
+points to release source commit 9bfd081ea4db6522d25df1c62fb1843d696182bb.
+The original Release identity and latest/download links are retained. Four old
+Build 6 backup attachments were removed after public verification and the
+user's explicit deletion authorization. Six final attachments remain: the
+three installers, third-party notices, FFmpeg source and SHA256SUMS.txt.
+
+Validation passed: 11 Python tests; iOS/tvOS platform and archive checks;
+version metadata and resource-pack checksums on all three platforms; exact
+bundled subtitle/notice bytes and the upstream MIT text; exclusion of original
+game archives and local instruction/credential files; Mac application signature
+and normal launch/exit; DMG integrity and a mounted byte-for-byte comparison of
+its application with the validated build. All six public assets were downloaded
+again and matched local SHA256 values, and all six latest/download links returned
+HTTP 200. The public source ZIP matches Build 8 code, metadata and original YAML
+bytes while excluding local instructions, plans, credentials and game archives.
