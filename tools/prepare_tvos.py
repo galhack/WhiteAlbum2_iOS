@@ -3,6 +3,7 @@
 """Prepare the pinned tvOS toolchain, isolated Godot project and native export."""
 import argparse
 import plistlib
+import re
 import shutil
 import subprocess
 import zipfile
@@ -53,6 +54,9 @@ def plugin():
 
 
 def stage():
+    # Keep the tvOS package aligned with the shared Apple release metadata.
+    versions = dict(re.findall(r'^application/(short_version|version)="([^"]+)"$',
+                               (ROOT / "export_presets.cfg").read_text(), re.MULTILINE))
     destination = ROOT / "build/tvos-project"
     destination.mkdir(parents=True, exist_ok=True)
     for name in ("assets", "scene", "shader", "script", "addons"):
@@ -98,8 +102,8 @@ shader_baker/enabled=true
 architectures/arm64=true
 application/app_store_team_id="LOCAL00000"
 application/bundle_identifier="org.local.wa2.tv"
-application/short_version="0.4.1"
-application/version="6"
+application/short_version="{versions['short_version']}"
+application/version="{versions['version']}"
 application/min_tvos_version="17.0"
 application/export_project_only=true
 application/delete_old_export_files_unconditionally=true
