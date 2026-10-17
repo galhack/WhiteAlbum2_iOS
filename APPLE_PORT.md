@@ -132,3 +132,33 @@ The unsigned IPA installs using Sideloadly 0.70.1 after freeing one device app s
 After the user trusted the signing profile on the device, WA2 launches natively on a physical iPad Pro with iPadOS 26.4.2. Both resource folders were imported over USB. All 84 main-game files match the local relative paths and byte sizes; all thirteen root Special Contents archives also match their local sizes. The launcher renders Chinese/Japanese labels and landscape layout. Actual Chinese Special Contents 4000 and Japanese IC 1001 dialogue render. The user reports normal sound and picture.
 
 The diagnostic write/read tests pass for both editions in separate processes. The read phase checks the edition/language profile, script, position, dialogue hash and local state, and removes its temporary save and expectation. Real touch, save/load buttons and background/resume are being checked separately. Physical iPhone and Vision Pro installation remain unverified. Screenshots and device/account metadata are local-only build artifacts and are excluded from Git.
+
+## v0.4.1 release validation (2026-10-18)
+
+Published [v0.4.1](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1)
+as the latest stable release, with iOS/tvOS/macOS optimized packages, FFmpeg source,
+third-party notices and checksums. All three applications report 0.4.1/build 6.
+GitHub asset sizes and SHA256 digests match the six local release files. Both
+READMEs link directly to the latest assets.
+
+The upstream subtitle files are preserved byte-for-byte, including line endings.
+Main data contains 6 SE/40 voice entries; Special Contents contains 23 drama
+chapters/5 song entries. Separate bundled files and external overrides are
+selected by edition; only Simplified Chinese mode enables these captions.
+The old mixed-source assets/sub.yaml remains excluded. Provenance, upstream
+revision, translation credits and the MIT notice are in SUBTITLE_NOTICE.md.
+
+Validation passed: C# compilation with zero warnings/errors, all C# fixtures
+(including 13 new schema/timeline checks and both complete datasets), 11 Python
+tests, rendered subtitle start/end/seek/stop, external overrides, Japanese
+isolation, actual SC drama audio with concurrent captions and lyrics, remote
+chapter selection/Play-Pause/Back, existing remote menus/choices and an actual
+dialogue save/load round trip. Both subtitle hashes and the MIT notice were
+verified inside each exported resource pack. The packaged Mac app launches
+and exits normally. Fresh physical subtitle interaction on every Apple
+device is not claimed by this release.
+
+An initial sandboxed verification failed to create Godot's user-data log
+directory. A later macOS window-restoration prompt blocked the legacy save
+smoke driver; dismissing that prompt allowed the unchanged test to run and
+pass. No game save implementation was changed to work around the harness.
