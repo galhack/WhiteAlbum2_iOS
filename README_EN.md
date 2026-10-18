@@ -130,6 +130,8 @@ The data comes from [nxs7/WA2-CHS-Subtitle-Patch](https://github.com/nxs7/WA2-CH
 
 Saves stay on each device and are kept separately for each edition and language. Chapters unlock as in the original: IC first, then CC, then Coda. Deleting the app deletes its data and saves, so back up `wa2/saves` first.
 
+PC scenario saves use a different binary layout. See [PC save conversion](PC_SAVE_IMPORT.md) for the offline converter and its supported layout. Mac main-game Simplified Chinese saves are in `~/Library/Application Support/Godot/app_userdata/wa2/saves/zh-Hans/`.
+
 ## Building from source
 
 You need macOS (Apple Silicon), Xcode, Godot 4.5.1 .NET with export templates, .NET SDK 9, Python 3 and SCons.

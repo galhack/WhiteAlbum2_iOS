@@ -254,6 +254,7 @@ Special Contents 的九篇数字小说按下表顺序显示全称。菜单会随
 - 本篇一开始只能选 IC；通关 IC 后开放 CC；达成 CC 中解锁 Coda 的结局后开放 Coda，和原作一致。
 - iPhone / iPad 上可以用访达或"文件"App 备份 `wa2/saves` 文件夹。**删除应用会同时删除存档和导入的数据**，删除前请先备份。
 - 用同一个 Apple ID 和同一个应用标识覆盖安装新版本，存档和数据都会保留。
+- PC 剧情存档与移植版内部格式不同，不能只改文件名；可使用[PC 存档转换工具](PC_SAVE_IMPORT.md)。Mac 本体简体中文存档目录为 `~/Library/Application Support/Godot/app_userdata/wa2/saves/zh-Hans/`。
 
 ## 常见问题
 
