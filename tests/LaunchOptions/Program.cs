@@ -272,3 +272,34 @@ Equal(4f, accumulated);
 accumulated = 0;
 Equal(2, Wa2TouchInput.DragSteps(ref accumulated, -120));
 Console.WriteLine("11 touch target and drag cases passed.");
+
+var gesture = new Wa2DialogueTouch();
+gesture.Begin(500, 610);
+Equal(true, gesture.End(504, 608)); // Finger jitter still counts as one tap.
+Equal(false, gesture.Active);
+gesture.Begin(500, 610);
+Equal(false, gesture.Move(503, 580)); // Wait for a deliberate upward swipe.
+Equal(true, gesture.Move(505, 562));
+Equal(false, gesture.Move(505, 540)); // Open history at most once per press.
+Equal(false, gesture.End(505, 540)); // A swipe never also advances the text.
+gesture.Begin(500, 610);
+Equal(false, gesture.Move(550, 610));
+Equal(false, gesture.Move(550, 510)); // A horizontal drag cannot become a swipe.
+Equal(false, gesture.End(550, 510));
+gesture.Begin(500, 610);
+Equal(false, gesture.Move(500, 640));
+Equal(false, gesture.Move(500, 540)); // Nor can a downward drag reverse into one.
+Equal(false, gesture.End(500, 540));
+gesture.Begin(500, 610);
+gesture.Cancel(); // Cancellation, another finger or long-press skip.
+Equal(false, gesture.Move(500, 540));
+Equal(false, gesture.End(500, 610));
+gesture.Begin(500, 610);
+gesture.Move(520, 610);
+Equal(false, gesture.End(500, 610)); // Moving away then back is not a tap.
+gesture.Begin(500, 610);
+gesture.Reset(); // A menu or focus change ends the pending gesture.
+Equal(false, gesture.End(500, 610));
+gesture.Begin(500, 610);
+Equal(true, gesture.End(500, 610)); // A fresh gesture works after reset.
+Console.WriteLine("17 dialogue gesture cases passed.");

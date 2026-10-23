@@ -92,15 +92,15 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 ## 第二步：获取安装包
 
-当前版本：[v0.4.1](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1)。下列直链始终获取最新正式版。
+当前移动设备版本：[v0.4.1 · Build 9](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build9)，适用于 iPhone、iPad 和 Vision Pro。Mac 保留 Build 8；Apple TV 暂停更新，除非维护者另行通知。
 
 在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
 | 文件 | 用途 |
 | --- | --- |
 | [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa) | iPhone / iPad，未签名，用 Sideloadly 以你自己的 Apple ID 签名安装 |
-| [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-AppleTV.ipa) | Apple TV，未签名 |
-| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg) | Mac（Apple 芯片） |
+| [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-AppleTV.ipa) | Apple TV，Build 8，未签名；暂停更新 |
+| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-macOS.dmg) | Mac（Apple 芯片），Build 8 |
 | [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz) | 应用所用 FFmpeg 的对应源码（LGPL 要求随附，玩游戏用不到） |
 | [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt) | 校验值 |
 
@@ -221,13 +221,14 @@ Special Contents 的九篇数字小说按下表顺序显示全称。菜单会随
 | 打开菜单 | 右上角 **≡** 按钮 | 注视 ≡ 后捏合 | **Menu / 返回** 键 | Esc，或点右上角 ≡ |
 | 快进 | 菜单 → 快进；或长按画面（需在设置中开启） | 菜单 → 快进 | 菜单 → 快进 | 按住 Ctrl |
 | 自动播放 | 菜单 → 自动，或底部快捷栏 | 同左 | **播放/暂停** 键，或菜单 → 自动 | 快捷栏 |
-| 历史记录 | 菜单 → 历史，上下拖动翻页 | 同左 | 菜单 → 历史，上下键翻页 | 滚轮 |
+| 历史记录 | 在对话框内上滑，或点底部历史按钮／菜单 → 历史；打开后上下拖动翻页 | 底部历史按钮／菜单 → 历史 | 菜单 → 历史，上下键翻页 | 滚轮 |
 | 存档 / 读档 | 菜单或底部快捷栏 | 同左 | 菜单 → 存档 / 读档 | 快捷栏 |
 | 返回标题 | 菜单 → 标题 | 同左 | 菜单 → 标题 | Esc → 标题 |
 | 关闭菜单 | 点击菜单外的空白处 | 同左 | Menu 键 | Esc |
 
 - Apple TV 上，方向键或在触控板上滑动来移动蓝色焦点框；在启动界面和标题主菜单按 Menu 键会回到 Apple TV 主屏幕。
 - 底部快捷栏和设置菜单里的小按钮，在 iPhone、iPad 和 Vision Pro 上都扩大了点击范围，但不会抢占相邻按钮的位置。
+- 对话框内轻点松手后推进文字，上滑打开历史时不会推进。全屏数字小说也支持上滑；原有存档、读档、设置、历史、自动、快进和隐藏对话框按钮继续可用。
 - 横屏两个方向都可以，翻转设备时画面会跟着转。
 
 ## 语言与字幕
