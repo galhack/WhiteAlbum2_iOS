@@ -92,15 +92,15 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 ## 第二步：获取安装包
 
-当前版本：[v0.4.1](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1)。下列直链始终获取最新正式版。
+当前移动设备版本：[v0.4.1 · Build 9](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build9)，适用于 iPhone、iPad 和 Vision Pro。Mac 保留 Build 8；Apple TV 暂停更新，除非维护者另行通知。
 
 在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
 | 文件 | 用途 |
 | --- | --- |
 | [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa) | iPhone / iPad，未签名，用 Sideloadly 以你自己的 Apple ID 签名安装 |
-| [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-AppleTV.ipa) | Apple TV，未签名 |
-| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg) | Mac（Apple 芯片） |
+| [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-AppleTV.ipa) | Apple TV，Build 8，未签名；暂停更新 |
+| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-macOS.dmg) | Mac（Apple 芯片），Build 8 |
 | [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz) | 应用所用 FFmpeg 的对应源码（LGPL 要求随附，玩游戏用不到） |
 | [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt) | 校验值 |
 

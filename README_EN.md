@@ -46,13 +46,13 @@ Do not nest folders. `Wa2Res` must directly contain `BGM.PAK`, `IC/` and so on.
 
 ## 2. Get the app package
 
-Current release: [v0.4.1](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1). The links below always download the latest stable release.
+Current mobile release: [v0.4.1 · Build 9](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build9), for iPhone, iPad and Vision Pro. Mac remains on Build 8. Apple TV updates are paused until the maintainer explicitly announces otherwise.
 
 Download from [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases):
 
 - [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa): iPhone/iPad, unsigned. Sign it with your own Apple ID in Sideloadly.
-- [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-AppleTV.ipa): Apple TV, unsigned.
-- [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg): Mac with Apple silicon.
+- [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-AppleTV.ipa): Apple TV, Build 8, unsigned; updates paused.
+- [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-macOS.dmg): Mac with Apple silicon, Build 8.
 - [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz): the corresponding FFmpeg source, provided as the LGPL requires. You do not need it to play.
 - [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt): checksums.
 
