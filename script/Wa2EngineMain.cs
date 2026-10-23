@@ -66,6 +66,9 @@ public partial class Wa2EngineMain : Control
 	public Wa2Var SelectVar;
 	public double PressedTime = 0.0f;
 	public bool IsPressed = false;
+	private readonly Wa2DialogueTouch _dialogueTouch = new();
+	private bool _touchStoppedSkip;
+	private bool _dialogueMousePress;
 	public int SelectIdx = -1;
 	public int ScriptIdx;
 	public int Year;
@@ -408,6 +411,7 @@ public partial class Wa2EngineMain : Control
 	}
 	public override void _Notification(int what)
 	{
+		if (what == NotificationApplicationFocusOut) ResetDialogueTouch();
 		if (what == 1007)
 		{
 			Back();
@@ -808,6 +812,7 @@ public partial class Wa2EngineMain : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public void InputKeyHandling()
 	{
+		if (_dialogueTouch.Active && !CanUseDialogueTouch()) ResetDialogueTouch();
 		if (UiMgr.UiQueue.Peek() != UiMgr.AdvMain && UiMgr.UiQueue.Peek() != UiMgr.UICalender)
 		{
 			StopSkip();
@@ -985,6 +990,101 @@ public partial class Wa2EngineMain : Control
 		}
 		// UpdateAnimators((float)delta);
 	}
+	private bool CanUseDialogueTouch() => State == GameState.GAME && AdvMain.IsVisibleInTree()
+		&& UiMgr.UiQueue.Count > 0 && UiMgr.UiQueue.Peek() == AdvMain
+		&& !VideoPlayer.IsPlaying && !DemoMode && !AdvMain.SelectMessageContainer.Visible
+		&& AdvMain.State is Wa2AdvMain.AdvState.WAIT_CLICK or Wa2AdvMain.AdvState.PARSE_TEXT;
+
+	private bool InDialogueArea(Vector2 position)
+	{
+		Control area = NovelMode ? AdvMain : AdvMain.MessageBox;
+		return area.GetGlobalRect().HasPoint(GetGlobalTransform() * position);
+	}
+
+	private void ResetDialogueTouch()
+	{
+		_dialogueTouch.Reset();
+		_dialogueMousePress = false;
+		IsPressed = false;
+		PressedTime = 0;
+	}
+
+	public override void _Input(InputEvent input)
+	{
+		if (!_dialogueTouch.Active) return;
+		if (!CanUseDialogueTouch()) ResetDialogueTouch();
+		else if (input is InputEventScreenTouch { Pressed: true, Index: not 0 })
+		{
+			// Another finger may land on a button, so cancel before GUI dispatch.
+			_dialogueTouch.Cancel();
+			IsPressed = false;
+			PressedTime = 0;
+		}
+	}
+
+	private bool HandleDialogueTouch(InputEvent input)
+	{
+		// Godot sends the emulated mouse press before the corresponding touch.
+		// Defer it in the dialogue area so an eventual swipe cannot advance text.
+		if (input is InputEventMouseButton { Device: -1, ButtonIndex: MouseButton.Left } mouse)
+		{
+			bool inDialogue = CanUseDialogueTouch() && InDialogueArea(mouse.Position);
+			if (mouse.Pressed) _dialogueMousePress = inDialogue;
+			return _dialogueTouch.Active || inDialogue;
+		}
+		if (input is InputEventScreenTouch { Index: 0 } touch)
+		{
+			if (touch.Pressed && CanUseDialogueTouch() && InDialogueArea(touch.Position))
+			{
+				// A button may have just closed an overlay on the emulated press.
+				// Its following touch must not become a new dialogue tap underneath.
+				if (Input.EmulateMouseFromTouch && !_dialogueMousePress) return true;
+				_dialogueMousePress = false;
+				_dialogueTouch.Begin(touch.Position.X, touch.Position.Y);
+				_touchStoppedSkip = SkipMode;
+				if (SkipMode) StopSkip();
+				IsPressed = true;
+				PressedTime = 0;
+				return true;
+			}
+			if (!touch.Pressed && _dialogueTouch.Active)
+			{
+				if (touch.Canceled || !CanUseDialogueTouch() || _touchStoppedSkip
+					|| (Prefs.GetConfig("checkskip") == 1 && PressedTime >= 0.6)) _dialogueTouch.Cancel();
+				bool open = !touch.Canceled && CanUseDialogueTouch() && _dialogueTouch.Move(touch.Position.X, touch.Position.Y);
+				bool tap = _dialogueTouch.End(touch.Position.X, touch.Position.Y);
+				ResetDialogueTouch();
+				if (open) OpenDialogueBacklog();
+				else if (tap)
+				{
+					IsClick = true;
+					ClickAdv(true);
+				}
+				return true;
+			}
+		}
+		if (input is InputEventScreenDrag { Index: 0 } drag && _dialogueTouch.Active)
+		{
+			bool open = _dialogueTouch.Move(drag.Position.X, drag.Position.Y);
+			if (_dialogueTouch.Moved)
+			{
+				IsPressed = false;
+				PressedTime = 0;
+			}
+			if (open && CanUseDialogueTouch()) OpenDialogueBacklog();
+			return true;
+		}
+		return false;
+	}
+
+	private void OpenDialogueBacklog()
+	{
+		ResetDialogueTouch();
+		StopSkip();
+		StopAutoMode();
+		AdvMain.OnBackLogButtonDown();
+	}
+
 	public override void _GuiInput(InputEvent @event)
 	{
 		switch (State)
@@ -1011,6 +1111,11 @@ public partial class Wa2EngineMain : Control
 				}
 				break;
 			case GameState.GAME:
+				if (HandleDialogueTouch(@event))
+				{
+					IsClick = false;
+					break;
+				}
 				// Only the touch itself changes the long-press state; the emulated
 				// mouse events and small finger drags that accompany it must not
 				// reset the timer, or long-press skip never reaches its threshold.

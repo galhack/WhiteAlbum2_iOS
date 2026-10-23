@@ -96,10 +96,12 @@ Launch the app, tap **Main** or **Special Contents**, choose a language and pres
 | Menu | **≡** button, top right | Menu / Back | Esc, or click ≡ |
 | Skip | Menu → Skip, or long-press (enable it in Options) | Menu → Skip | Hold Ctrl |
 | Auto | Menu → Auto | Play/Pause | Quick bar |
-| Backlog | Menu → Backlog, then drag | Menu → Backlog, then up/down | Mouse wheel |
+| Backlog | Swipe up inside the dialogue box, or use the original Backlog button / Menu → Backlog; drag to scroll | Menu → Backlog, then up/down | Mouse wheel |
 | Close a menu | Tap outside it | Menu | Esc |
 
 On Vision Pro, look at a control and pinch. On Apple TV, pressing Menu on the launcher or the title screen returns to the Home screen. Small buttons get enlarged touch areas that never overlap a neighbouring button's own area.
+
+A touch tap inside the dialogue box advances text on release; swiping up opens history without advancing. Full-page digital novels support the same swipe. The original Save, Load, Options, Backlog, Auto, Skip and Hide buttons remain available.
 
 ## Languages and subtitles
 
