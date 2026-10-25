@@ -407,6 +407,11 @@ public partial class Wa2EngineMain : Control
 	// Normal audio and animations follow SceneTree.Paused; WMV has its own clock.
 	private bool _pausedForFocusLoss;
 	private bool _resumeVideoOnFocus;
+	private bool _previousLowProcessorMode;
+	private int _previousLowProcessorSleepUsec;
+	private int _previousMaxFps;
+	private int _previousPhysicsTicksPerSecond;
+	private bool _previousRenderLoopEnabled = true;
 	private readonly List<AudioStreamPlayer> _previouslyPausedPlayers = new();
 
 	public override void _ExitTree()
@@ -414,6 +419,7 @@ public partial class Wa2EngineMain : Control
 		// Do not leave the application paused if its game scene is removed.
 		if (_pausedForFocusLoss)
 		{
+			RestoreEngineLoopSettings();
 			GetTree().Paused = false;
 			_pausedForFocusLoss = false;
 		}
@@ -461,6 +467,7 @@ public partial class Wa2EngineMain : Control
 
 		_pausedForFocusLoss = true;
 		GetTree().Paused = true;
+		ThrottleEngineLoopForBackground();
 	}
 
 	private void ResumeAfterFocus()
@@ -468,6 +475,7 @@ public partial class Wa2EngineMain : Control
 		if (!_pausedForFocusLoss || !IsInsideTree())
 			return;
 
+		RestoreEngineLoopSettings();
 		GetTree().Paused = false;
 		if (_resumeVideoOnFocus &&
 			GodotObject.IsInstanceValid(VideoPlayer) && VideoPlayer.IsOpen())
@@ -481,6 +489,33 @@ public partial class Wa2EngineMain : Control
 		_previouslyPausedPlayers.Clear();
 		_resumeVideoOnFocus = false;
 		_pausedForFocusLoss = false;
+		QueueRedraw();
+	}
+
+	private void ThrottleEngineLoopForBackground()
+	{
+		_previousLowProcessorMode = OS.LowProcessorUsageMode;
+		_previousLowProcessorSleepUsec = OS.LowProcessorUsageModeSleepUsec;
+		_previousMaxFps = Godot.Engine.MaxFps;
+		_previousPhysicsTicksPerSecond = Godot.Engine.PhysicsTicksPerSecond;
+		_previousRenderLoopEnabled = RenderingServer.RenderLoopEnabled;
+
+		// Stop redundant OpenGL/Metal redraws and buffer swaps while unfocused,
+		// and sleep the main loop so it does not spin without VSync.
+		RenderingServer.RenderLoopEnabled = false;
+		OS.LowProcessorUsageMode = true;
+		OS.LowProcessorUsageModeSleepUsec = 250_000;
+		Godot.Engine.MaxFps = 4;
+		Godot.Engine.PhysicsTicksPerSecond = 1;
+	}
+
+	private void RestoreEngineLoopSettings()
+	{
+		RenderingServer.RenderLoopEnabled = _previousRenderLoopEnabled;
+		OS.LowProcessorUsageMode = _previousLowProcessorMode;
+		OS.LowProcessorUsageModeSleepUsec = _previousLowProcessorSleepUsec;
+		Godot.Engine.MaxFps = _previousMaxFps;
+		Godot.Engine.PhysicsTicksPerSecond = _previousPhysicsTicksPerSecond;
 	}
 	public void Back()
 	{
