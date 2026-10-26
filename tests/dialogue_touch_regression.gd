@@ -115,6 +115,7 @@ func check_touch() -> void:
     # Losing focus cancels the pending tap and hold timer.
     await touch(start, true)
     game.notification(MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT)
+    game.notification(MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN)
     await touch(start, false)
     await require(adv.get("State") == 3 and not game.get("IsPressed"), "Focus loss retained a tap or hold")
 

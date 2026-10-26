@@ -410,7 +410,6 @@ public partial class Wa2EngineMain : Control
 	private bool _previousLowProcessorMode;
 	private int _previousLowProcessorSleepUsec;
 	private int _previousMaxFps;
-	private int _previousPhysicsTicksPerSecond;
 	private bool _previousRenderLoopEnabled = true;
 	private readonly List<AudioStreamPlayer> _previouslyPausedPlayers = new();
 
@@ -497,7 +496,6 @@ public partial class Wa2EngineMain : Control
 		_previousLowProcessorMode = OS.LowProcessorUsageMode;
 		_previousLowProcessorSleepUsec = OS.LowProcessorUsageModeSleepUsec;
 		_previousMaxFps = Godot.Engine.MaxFps;
-		_previousPhysicsTicksPerSecond = Godot.Engine.PhysicsTicksPerSecond;
 		_previousRenderLoopEnabled = RenderingServer.RenderLoopEnabled;
 
 		// Stop redundant OpenGL/Metal redraws and buffer swaps while unfocused,
@@ -506,7 +504,8 @@ public partial class Wa2EngineMain : Control
 		OS.LowProcessorUsageMode = true;
 		OS.LowProcessorUsageModeSleepUsec = 250_000;
 		Godot.Engine.MaxFps = 4;
-		Godot.Engine.PhysicsTicksPerSecond = 1;
+		// Keep physics cadence stable: switching it can yield negative process
+		// deltas when Godot catches up after returning to the foreground.
 	}
 
 	private void RestoreEngineLoopSettings()
@@ -515,7 +514,6 @@ public partial class Wa2EngineMain : Control
 		OS.LowProcessorUsageMode = _previousLowProcessorMode;
 		OS.LowProcessorUsageModeSleepUsec = _previousLowProcessorSleepUsec;
 		Godot.Engine.MaxFps = _previousMaxFps;
-		Godot.Engine.PhysicsTicksPerSecond = _previousPhysicsTicksPerSecond;
 	}
 	public void Back()
 	{
