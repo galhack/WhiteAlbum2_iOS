@@ -404,18 +404,116 @@ public partial class Wa2EngineMain : Control
 		byte value = (byte)((SysSav.Get8() >> (8 - bitOffset - 1)) & mask);
 		return value == 1;
 	}
+	// Normal audio and animations follow SceneTree.Paused; WMV has its own clock.
+	private bool _pausedForFocusLoss;
+	private bool _resumeVideoOnFocus;
+	private bool _previousLowProcessorMode;
+	private int _previousLowProcessorSleepUsec;
+	private int _previousMaxFps;
+	private bool _previousRenderLoopEnabled = true;
+	private readonly List<AudioStreamPlayer> _previouslyPausedPlayers = new();
+
 	public override void _ExitTree()
 	{
+		// Do not leave the application paused if its game scene is removed.
+		if (_pausedForFocusLoss)
+		{
+			RestoreEngineLoopSettings();
+			GetTree().Paused = false;
+			_pausedForFocusLoss = false;
+		}
+		_previouslyPausedPlayers.Clear();
 		SysSav?.Close();
 		if (ReferenceEquals(Engine, this)) Engine = null;
 	}
 	public override void _Notification(int what)
 	{
 		if (what == NotificationApplicationFocusOut) ResetDialogueTouch();
+		if (OS.GetName() == "macOS")
+		{
+			// macOS may deliver both an application and a window focus event.
+			if (what == NotificationApplicationFocusOut ||
+				what == NotificationWMWindowFocusOut)
+				PauseForFocusLoss();
+			else if (what == NotificationApplicationFocusIn ||
+				what == NotificationWMWindowFocusIn)
+				ResumeAfterFocus();
+		}
 		if (what == 1007)
 		{
 			Back();
 		}
+	}
+
+	private void PauseForFocusLoss()
+	{
+		// Never claim ownership of a pause initiated elsewhere.
+		if (_pausedForFocusLoss || !IsInsideTree() || GetTree().Paused)
+			return;
+
+		// Godot unpauses AudioStreamPlayer streams when the tree resumes.
+		// Keep streams the user had explicitly paused (e.g. radio dramas).
+		_previouslyPausedPlayers.Clear();
+		foreach (Node node in GetTree().Root.FindChildren("*", "AudioStreamPlayer", true, false))
+		{
+			if (node is AudioStreamPlayer player && player.StreamPaused)
+				_previouslyPausedPlayers.Add(player);
+		}
+
+		_resumeVideoOnFocus = GodotObject.IsInstanceValid(VideoPlayer) && VideoPlayer.IsPlaying;
+		if (_resumeVideoOnFocus)
+			VideoPlayer.Pause();
+
+		_pausedForFocusLoss = true;
+		GetTree().Paused = true;
+		ThrottleEngineLoopForBackground();
+	}
+
+	private void ResumeAfterFocus()
+	{
+		if (!_pausedForFocusLoss || !IsInsideTree())
+			return;
+
+		RestoreEngineLoopSettings();
+		GetTree().Paused = false;
+		if (_resumeVideoOnFocus &&
+			GodotObject.IsInstanceValid(VideoPlayer) && VideoPlayer.IsOpen())
+			VideoPlayer.Play();
+
+		foreach (AudioStreamPlayer player in _previouslyPausedPlayers)
+		{
+			if (GodotObject.IsInstanceValid(player) && player.IsInsideTree())
+				player.StreamPaused = true;
+		}
+		_previouslyPausedPlayers.Clear();
+		_resumeVideoOnFocus = false;
+		_pausedForFocusLoss = false;
+		QueueRedraw();
+	}
+
+	private void ThrottleEngineLoopForBackground()
+	{
+		_previousLowProcessorMode = OS.LowProcessorUsageMode;
+		_previousLowProcessorSleepUsec = OS.LowProcessorUsageModeSleepUsec;
+		_previousMaxFps = Godot.Engine.MaxFps;
+		_previousRenderLoopEnabled = RenderingServer.RenderLoopEnabled;
+
+		// Stop redundant OpenGL/Metal redraws and buffer swaps while unfocused,
+		// and sleep the main loop so it does not spin without VSync.
+		RenderingServer.RenderLoopEnabled = false;
+		OS.LowProcessorUsageMode = true;
+		OS.LowProcessorUsageModeSleepUsec = 250_000;
+		Godot.Engine.MaxFps = 4;
+		// Keep physics cadence stable: switching it can yield negative process
+		// deltas when Godot catches up after returning to the foreground.
+	}
+
+	private void RestoreEngineLoopSettings()
+	{
+		RenderingServer.RenderLoopEnabled = _previousRenderLoopEnabled;
+		OS.LowProcessorUsageMode = _previousLowProcessorMode;
+		OS.LowProcessorUsageModeSleepUsec = _previousLowProcessorSleepUsec;
+		Godot.Engine.MaxFps = _previousMaxFps;
 	}
 	public void Back()
 	{
