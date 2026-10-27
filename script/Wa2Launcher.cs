@@ -7,6 +7,7 @@ public partial class Wa2Launcher : Control
 {
     private LineEdit _directory;
     private OptionButton _language;
+    private CheckButton _showTouchMenu;
     private Label _status;
     private Wa2AssetLoader _loader;
     private Wa2LaunchOptions _options;
@@ -56,6 +57,12 @@ public partial class Wa2Launcher : Control
         _language = new OptionButton { CustomMinimumSize = buttonSize };
         foreach (string name in new[] { "日本語", "简体中文 · CK-GAL", "English · translation required", "繁體中文 · 需语言包" }) _language.AddItem(name);
         box.AddChild(_language);
+        if (OS.GetName() is "iOS" or "macOS")
+        {
+            _showTouchMenu = new CheckButton { Name = "ShowTouchMenu", Text = "Show corner menu / 显示右上角菜单",
+                ButtonPressed = true, CustomMinimumSize = buttonSize };
+            box.AddChild(_showTouchMenu);
+        }
         // Play and the licence viewer share a row so the launcher fits 720 px at phone font sizes.
         var actions = new HBoxContainer();
         actions.AddThemeConstantOverride("separation", 16);
@@ -80,6 +87,7 @@ public partial class Wa2Launcher : Control
             if (OS.GetName() is "iOS" or "tvOS")
                 defaultDirectory = Path.Combine(documents, Path.GetFileName(defaultDirectory.TrimEnd(Path.DirectorySeparatorChar)));
         }
+        if (_showTouchMenu != null) _showTouchMenu.ButtonPressed = config.GetValue("game", "show_touch_menu", true).AsBool();
         try
         {
             _options = Wa2LaunchOptions.Parse(OS.GetCmdlineUserArgs(), defaultDirectory);
@@ -123,12 +131,15 @@ public partial class Wa2Launcher : Control
             var scene = ResourceLoader.Load<PackedScene>("res://main.tscn");
             if (scene == null) throw new InvalidDataException("Cannot load game scene. Check the engine log.");
             game = scene.Instantiate<Wa2EngineMain>();
+            game.ShowTouchMenu = _showTouchMenu?.ButtonPressed ?? true;
             GetTree().Root.AddChild(game);
             GetTree().CurrentScene = game;
             var config = new ConfigFile();
             config.SetValue("game", "directory", data.Directory);
             config.SetValue("game", "language", data.Language);
-            config.Save("user://launcher.cfg");
+            if (_showTouchMenu != null) config.SetValue("game", "show_touch_menu", game.ShowTouchMenu);
+            Error saveError = config.Save("user://launcher.cfg");
+            if (saveError != Error.Ok) throw new IOException($"Cannot save launcher settings: {saveError}");
             if (!string.IsNullOrEmpty(_options?.StartScript))
             {
                 game.InitGame();

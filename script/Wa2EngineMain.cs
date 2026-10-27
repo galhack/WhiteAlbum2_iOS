@@ -60,6 +60,7 @@ public partial class Wa2EngineMain : Control
 	public int ReplayMode = 0;
 	public bool AutoMode = false;
 	public bool NovelMode = false;
+	public bool ShowTouchMenu = true;
 	public bool ClickedInWait;
 	public int CurMessageIdx;
 	public static Wa2EngineMain Engine;
@@ -1093,10 +1094,10 @@ public partial class Wa2EngineMain : Control
 		&& !VideoPlayer.IsPlaying && !DemoMode && !AdvMain.SelectMessageContainer.Visible
 		&& AdvMain.State is Wa2AdvMain.AdvState.WAIT_CLICK or Wa2AdvMain.AdvState.PARSE_TEXT;
 
-	private bool InDialogueArea(Vector2 position)
+	private bool InDialogueCanvas(Vector2 position)
 	{
-		Control area = NovelMode ? AdvMain : AdvMain.MessageBox;
-		return area.GetGlobalRect().HasPoint(GetGlobalTransform() * position);
+		// GUI dispatch lets buttons handle their own touches before they reach us.
+		return AdvMain.GetGlobalRect().HasPoint(GetGlobalTransform() * position);
 	}
 
 	private void ResetDialogueTouch()
@@ -1123,16 +1124,16 @@ public partial class Wa2EngineMain : Control
 	private bool HandleDialogueTouch(InputEvent input)
 	{
 		// Godot sends the emulated mouse press before the corresponding touch.
-		// Defer it in the dialogue area so an eventual swipe cannot advance text.
+		// Defer it across the game canvas so an eventual swipe cannot advance text.
 		if (input is InputEventMouseButton { Device: -1, ButtonIndex: MouseButton.Left } mouse)
 		{
-			bool inDialogue = CanUseDialogueTouch() && InDialogueArea(mouse.Position);
+			bool inDialogue = CanUseDialogueTouch() && InDialogueCanvas(mouse.Position);
 			if (mouse.Pressed) _dialogueMousePress = inDialogue;
 			return _dialogueTouch.Active || inDialogue;
 		}
 		if (input is InputEventScreenTouch { Index: 0 } touch)
 		{
-			if (touch.Pressed && CanUseDialogueTouch() && InDialogueArea(touch.Position))
+			if (touch.Pressed && CanUseDialogueTouch() && InDialogueCanvas(touch.Position))
 			{
 				// A button may have just closed an overlay on the emulated press.
 				// Its following touch must not become a new dialogue tap underneath.

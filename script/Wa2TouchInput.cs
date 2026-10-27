@@ -44,7 +44,7 @@ public static class Wa2TouchInput
     }
 }
 
-// A dialogue press is either a tap or one upward swipe, never both.
+// A dialogue press is either a tap or one downward swipe, never both.
 public sealed class Wa2DialogueTouch
 {
     private const float TapSlop = 16f;
@@ -67,8 +67,8 @@ public sealed class Wa2DialogueTouch
         if (!Active) return false;
         float dx = Math.Abs(x - _startX), dy = y - _startY;
         Moved |= dx > TapSlop || Math.Abs(dy) > TapSlop;
-        if (dy > TapSlop || (dx > TapSlop && dx >= Math.Abs(dy))) _canSwipe = false;
-        if (!_canSwipe || _opened || -dy < SwipeDistance || -dy <= dx) return false;
+        if (dy < -TapSlop || (dx > TapSlop && dx >= Math.Abs(dy))) _canSwipe = false;
+        if (!_canSwipe || _opened || dy < SwipeDistance || dy <= dx) return false;
         _opened = true;
         return true;
     }

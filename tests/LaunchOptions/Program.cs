@@ -278,21 +278,21 @@ gesture.Begin(500, 610);
 Equal(true, gesture.End(504, 608)); // Finger jitter still counts as one tap.
 Equal(false, gesture.Active);
 gesture.Begin(500, 610);
-Equal(false, gesture.Move(503, 580)); // Wait for a deliberate upward swipe.
-Equal(true, gesture.Move(505, 562));
-Equal(false, gesture.Move(505, 540)); // Open history at most once per press.
-Equal(false, gesture.End(505, 540)); // A swipe never also advances the text.
+Equal(false, gesture.Move(503, 640)); // Wait for a deliberate downward swipe.
+Equal(true, gesture.Move(505, 658));
+Equal(false, gesture.Move(505, 680)); // Open history at most once per press.
+Equal(false, gesture.End(505, 680)); // A swipe never also advances the text.
 gesture.Begin(500, 610);
 Equal(false, gesture.Move(550, 610));
-Equal(false, gesture.Move(550, 510)); // A horizontal drag cannot become a swipe.
-Equal(false, gesture.End(550, 510));
+Equal(false, gesture.Move(550, 710)); // A horizontal drag cannot become a swipe.
+Equal(false, gesture.End(550, 710));
 gesture.Begin(500, 610);
-Equal(false, gesture.Move(500, 640));
-Equal(false, gesture.Move(500, 540)); // Nor can a downward drag reverse into one.
-Equal(false, gesture.End(500, 540));
+Equal(false, gesture.Move(500, 580));
+Equal(false, gesture.Move(500, 680)); // Nor can an upward drag reverse into one.
+Equal(false, gesture.End(500, 680));
 gesture.Begin(500, 610);
 gesture.Cancel(); // Cancellation, another finger or long-press skip.
-Equal(false, gesture.Move(500, 540));
+Equal(false, gesture.Move(500, 680));
 Equal(false, gesture.End(500, 610));
 gesture.Begin(500, 610);
 gesture.Move(520, 610);
@@ -302,4 +302,10 @@ gesture.Reset(); // A menu or focus change ends the pending gesture.
 Equal(false, gesture.End(500, 610));
 gesture.Begin(500, 610);
 Equal(true, gesture.End(500, 610)); // A fresh gesture works after reset.
-Console.WriteLine("17 dialogue gesture cases passed.");
+gesture.Begin(500, 300);
+Equal(false, gesture.Move(500, 240));
+Equal(false, gesture.End(500, 240)); // Upward release cannot open history or tap.
+gesture.Begin(500, 300);
+Equal(true, gesture.Move(500, 348)); // Same distance works above the dialogue box.
+Equal(false, gesture.End(500, 348));
+Console.WriteLine("21 dialogue gesture cases passed.");
