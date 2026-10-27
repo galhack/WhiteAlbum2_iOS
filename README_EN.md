@@ -46,7 +46,7 @@ Do not nest folders. `Wa2Res` must directly contain `BGM.PAK`, `IC/` and so on.
 
 ## 2. Get the app package
 
-Current mobile release: [v0.4.1 · Build 9](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build9), for iPhone, iPad and Vision Pro. Mac remains on Build 8. Apple TV updates are paused until the maintainer explicitly announces otherwise.
+Current mobile release: [v0.4.1 · Build 10](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build10), for iPhone, iPad and Vision Pro. Mac remains on Build 8. Apple TV updates are paused until the maintainer explicitly announces otherwise.
 
 Download from [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases):
 
@@ -88,6 +88,8 @@ tvOS may purge cached game data when storage runs low. If that happens, import t
 
 Launch the app, tap **Main** or **Special Contents**, choose a language and press **Play**.
 
+Before playing, turn off **Show corner menu / 显示右上角菜单** to hide the **≡** button. It is enabled by default; pressing Play saves your choice, and you can enable it again on the next launch. The Apple port adds this button and its pause panel. The original Save, Load, Options, Backlog, Auto, Skip and Hide controls remain available when it is hidden. Returning to the title uses the pause menu; enable the corner button on the next launch if needed.
+
 ## Controls
 
 | Action | Touch | Siri Remote | Keyboard / mouse |
@@ -96,12 +98,12 @@ Launch the app, tap **Main** or **Special Contents**, choose a language and pres
 | Menu | **≡** button, top right | Menu / Back | Esc, or click ≡ |
 | Skip | Menu → Skip, or long-press (enable it in Options) | Menu → Skip | Hold Ctrl |
 | Auto | Menu → Auto | Play/Pause | Quick bar |
-| Backlog | Swipe up inside the dialogue box, or use the original Backlog button / Menu → Backlog; drag to scroll | Menu → Backlog, then up/down | Mouse wheel |
+| Backlog | Swipe down on the game canvas, including outside the dialogue box, or use the original Backlog button / Menu → Backlog; drag to scroll | Menu → Backlog, then up/down | Mouse wheel |
 | Close a menu | Tap outside it | Menu | Esc |
 
 On Vision Pro, look at a control and pinch. On Apple TV, pressing Menu on the launcher or the title screen returns to the Home screen. Small buttons get enlarged touch areas that never overlap a neighbouring button's own area.
 
-A touch tap inside the dialogue box advances text on release; swiping up opens history without advancing. Full-page digital novels support the same swipe. The original Save, Load, Options, Backlog, Auto, Skip and Hide buttons remain available.
+A touch tap on the game canvas advances text on release; swiping down opens history without advancing. Full-page digital novels support the same swipe. Choices, movies and other menus keep their own input handling, and the original shortcut buttons remain available.
 
 ## Languages and subtitles
 

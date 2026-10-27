@@ -9,7 +9,12 @@ func _initialize() -> void:
     check_touch.call_deferred()
 
 func frames(count: int = 4) -> void:
-    for frame in range(count): await process_frame
+    for frame in range(count):
+        # Synthetic pointer input represents a foreground app. macOS otherwise
+        # pauses an unattended window before these gesture checks can run.
+        if paused and is_instance_valid(game):
+            game.notification(MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN)
+        await process_frame
 
 func require(condition: bool, message: String) -> void:
     if not condition:
@@ -52,8 +57,8 @@ func prepare_dialogue() -> void:
 func swipe(start: Vector2) -> void:
     await touch(start, true)
     await require(adv.get("State") == 3, "Touch-down advanced dialogue before recognizing a swipe")
-    await drag(start + Vector2(2, -60), Vector2(2, -60))
-    await touch(start + Vector2(2, -60), false)
+    await drag(start + Vector2(2, 60), Vector2(2, 60))
+    await touch(start + Vector2(2, 60), false)
 
 func check_touch() -> void:
     Input.emulate_mouse_from_touch = true
@@ -67,6 +72,7 @@ func check_touch() -> void:
     adv = game.get("AdvMain")
     var ready = false
     for frame in range(2400):
+        if paused: game.notification(MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN)
         var state = game.call("GetPortDiagnostics")
         if state["ui"] == "AdvMain" and state["dialogue_state"] == "WAIT_CLICK" and not state["wait"] and not state["animation_wait"]:
             ready = true
@@ -74,13 +80,13 @@ func check_touch() -> void:
         if frame % 120 == 0 and game.get("VideoPlayer").get("IsPlaying"):
             game.call("OnVideoFinished")
         await process_frame
-    await require(ready, "Story did not reach stable dialogue")
+    await require(ready, "Story did not reach stable dialogue: " + str(game.call("GetPortDiagnostics")) + " paused=" + str(paused))
     game.set_process(false) # Freeze script progression while checking each input.
     var start = adv.get("MessageBox").get_global_rect().get_center()
     var position = game.call("GetPortDiagnostics")["position"]
     await swipe(start)
     var backlog = ui.get("BackLogMenu")
-    await require(backlog.visible and not adv.visible, "Upward dialogue swipe did not open history")
+    await require(backlog.visible and not adv.visible, "Downward dialogue swipe did not open history")
     await require(adv.get("State") == 3 and game.call("GetPortDiagnostics")["position"] == position, "Swipe advanced the story")
     await require(not game.get("IsPressed") and game.get("PressedTime") == 0.0, "Swipe left long-press skip active")
     await click_button(backlog.get("ExitBtn"))
@@ -94,12 +100,30 @@ func check_touch() -> void:
     await touch(start, false)
     await require(adv.get("State") == 0, "Tap did not advance on release")
 
-    for delta in [Vector2(70, 0), Vector2(0, 60)]:
+    # Background above the dialogue box participates in the same gesture.
+    prepare_dialogue()
+    await swipe(Vector2(500, 300))
+    await require(backlog.visible and adv.get("State") == 3, "Downward background swipe failed or advanced dialogue")
+    await click_button(backlog.get("ExitBtn"))
+    prepare_dialogue()
+    await touch(Vector2(500, 300), true)
+    await require(adv.get("State") == 3, "Background tap advanced before release")
+    await touch(Vector2(500, 300), false)
+    await require(adv.get("State") == 0, "Background tap did not advance on release")
+
+    # Some devices only report the final position on release.
+    prepare_dialogue()
+    await touch(Vector2(500, 300), true)
+    await touch(Vector2(500, 360), false)
+    await require(backlog.visible and adv.get("State") == 3, "Release-only downward swipe failed or advanced dialogue")
+    await click_button(backlog.get("ExitBtn"))
+
+    for delta in [Vector2(70, 0), Vector2(0, -60)]:
         prepare_dialogue()
         await touch(start, true)
         await drag(start + delta, delta)
         await touch(start + delta, false)
-        await require(adv.visible and adv.get("State") == 3, "Non-upward drag triggered history or advance")
+        await require(adv.visible and adv.get("State") == 3, "Non-downward drag triggered history or advance")
 
     prepare_dialogue()
     await touch(start, true)
@@ -107,8 +131,8 @@ func check_touch() -> void:
     await require(adv.get("State") == 3, "Canceled touch advanced dialogue")
     await touch(start, true)
     await touch(Vector2(20, 20), true, 1)
-    await drag(start + Vector2(0, -60), Vector2(0, -60))
-    await touch(start + Vector2(0, -60), false)
+    await drag(start + Vector2(0, 60), Vector2(0, 60))
+    await touch(start + Vector2(0, 60), false)
     await touch(Vector2(20, 20), false, 1)
     await require(adv.visible and adv.get("State") == 3, "Multitouch triggered history or advance")
 
@@ -136,6 +160,17 @@ func check_touch() -> void:
     var options = ui.get("OptionsMenu")
     await require(options.visible, "Original Options shortcut failed")
     await click_button(options.get("ExitBtn"))
+
+    var corner = adv.get_node_or_null("TouchMenuButton")
+    if corner != null:
+        prepare_dialogue()
+        await click_button(corner)
+        var pause = root.find_child("RemotePauseMenu", true, false)
+        await require(pause != null and pause.visible, "Corner menu button failed")
+        await require(adv.get("State") == 3, "Opening corner menu advanced dialogue")
+        await touch(Vector2(20, 20), true)
+        await touch(Vector2(20, 20), false)
+        await require(not pause.visible and adv.get("State") == 3, "Closing pause menu leaked its touch to dialogue")
 
     # A menu taking over mid-press discards the pending dialogue tap.
     prepare_dialogue()
@@ -165,8 +200,8 @@ func check_touch() -> void:
 
     game.call("BeginPortRemoteChoiceProbe")
     await touch(start, true)
-    await drag(start + Vector2(0, -60), Vector2(0, -60))
-    await touch(start + Vector2(0, -60), false)
+    await drag(start + Vector2(0, 60), Vector2(0, 60))
+    await touch(start + Vector2(0, 60), false)
     await require(adv.get("SelectMessageContainer").visible and not backlog.visible, "Swipe interfered with an active choice")
     game.call("EndPortRemoteChoiceProbe")
     game.set_process(false)
@@ -186,7 +221,7 @@ func check_touch() -> void:
     await require(novel_log.visible, "Novel swipe opened the wrong history menu")
     await click_button(novel_log.get("ExitBtn"))
     adv.call("SetNovelMode", false)
-    print("WA2_DIALOGUE_TOUCH passed: emulated input, swipe, tap, drag, cancel, multitouch, focus, menu takeover, hold/skip/auto, choices, original controls, novel history")
+    print("WA2_DIALOGUE_TOUCH passed: downward dialogue/background/novel swipes, release taps, direction rejection, cancel, multitouch, focus, menu takeover, hold/skip/auto, choices, original controls")
     for child in root.get_children(): child.queue_free()
     await frames()
     quit(0)
