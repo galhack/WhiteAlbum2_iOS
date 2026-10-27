@@ -46,7 +46,7 @@ Do not nest folders. `Wa2Res` must directly contain `BGM.PAK`, `IC/` and so on.
 
 ## 2. Get the app package
 
-Current mobile release: [v0.4.1 · Build 9](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build9), for iPhone, iPad and Vision Pro. Mac remains on Build 8. Apple TV updates are paused until the maintainer explicitly announces otherwise.
+Current mobile release: [v0.4.1 · Build 10](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build10), for iPhone, iPad and Vision Pro. Mac remains on Build 8. Apple TV updates are paused until the maintainer explicitly announces otherwise.
 
 Download from [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases):
 

@@ -92,7 +92,7 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 ## 第二步：获取安装包
 
-当前移动设备版本：[v0.4.1 · Build 9](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build9)，适用于 iPhone、iPad 和 Vision Pro。Mac 保留 Build 8；Apple TV 暂停更新，除非维护者另行通知。
+当前移动设备版本：[v0.4.1 · Build 10](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build10)，适用于 iPhone、iPad 和 Vision Pro。Mac 保留 Build 8；Apple TV 暂停更新，除非维护者另行通知。
 
 在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
