@@ -92,14 +92,15 @@ float particle_scale(vec4 custom, vec4 userdata1) {
 }
 
 void start(){
-	if (USERDATA3.x==0.0){
+	// CUSTOM is cleared for a fresh buffer and its age survives normal re-emission.
+	// Reusing the age avoids a second USERDATA attribute in GLES3 transform feedback.
+	if (CUSTOM.w == 0.0) {
 		active(true, NUMBER, CUSTOM, USERDATA1);
 		TRANSFORM[3].xy = particle_position(CUSTOM, USERDATA1);
 		COLOR.a = particle_alpha_from_radius(CUSTOM.y);
 		float scale = particle_scale(CUSTOM, USERDATA1);
 		TRANSFORM[0].xy = normalize(TRANSFORM[0].xy) * scale;
 		TRANSFORM[1].xy = normalize(TRANSFORM[1].xy) * scale;
-		USERDATA3.x=1.0;
 	}
 }
 void process(){
