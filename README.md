@@ -19,6 +19,7 @@
   - [第一步：准备游戏数据](#第一步准备游戏数据)
   - [第二步：获取安装包](#第二步获取安装包)
   - [第三步：安装到设备](#第三步安装到设备)
+    - [iPhone / iPad（TestFlight）](#iphone--ipadtestflight)
     - [iPhone / iPad（Sideloadly）](#iphone--ipadsideloadly)
     - [Apple Vision Pro（Xcode）](#apple-vision-proxcode)
     - [Apple TV（Xcode）](#apple-tvxcode)
@@ -52,11 +53,11 @@
 ## 准备工作
 
 - **正版《WHITE ALBUM 2》PC 版**：需要本篇（含 IC/CC/Coda），可选择另购 Special Contents。
-- 一台 **Mac**（推荐）或 Windows 电脑，用来签名安装应用、拷贝游戏数据。在 Mac 上玩则不需要其他设备。
-- 一个 **Apple ID**。免费账户即可，但签名 7 天后过期，需要重签（见[常见问题](#常见问题)）。
+- 一台 **Mac**（推荐）或 Windows 电脑，可用于准备和拷贝游戏数据，以及签名安装 GitHub 的 IPA。在 Mac 上玩则不需要其他设备。
+- 一个 **Apple ID**，用于加入 TestFlight 或签名安装 IPA。使用免费 Apple ID 签名的 IPA 需要每 7 天续签（见[常见问题](#常见问题)）。
 - 设备上至少要有 **12 GB 可用空间**：本篇约 7.9 GB，Special Contents 约 3.5 GB。
 - 安装工具：
-  - iPhone / iPad：[Sideloadly](https://sideloadly.io/)（macOS / Windows）
+  - iPhone / iPad：[TestFlight](https://apps.apple.com/app/testflight/id899247664)（公开测试）或 [Sideloadly](https://sideloadly.io/)（GitHub IPA，macOS / Windows）
   - Vision Pro / Apple TV：[Xcode](https://developer.apple.com/xcode/)（仅 macOS）
 
 ## 第一步：准备游戏数据
@@ -94,6 +95,8 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 当前版本 [v0.4.2 · Build 12](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.2) 适用于 iPhone、iPad、Vision Pro 和 Apple 芯片 Mac。
 
+公开测试版通过 TestFlight 安装。 [加入 WA2 的 TestFlight 公开测试](https://testflight.apple.com/join/fuwpaUZc)
+
 在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
 | 文件 | 用途 |
@@ -106,6 +109,16 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 安装包里**不含原版游戏资源**（内置独立的第三方中文字幕）。也可以按[从源码构建](#从源码构建)自己编译。
 
 ## 第三步：安装到设备
+
+### iPhone / iPad（TestFlight）
+
+1. 在设备上通过 App Store 安装 [TestFlight](https://apps.apple.com/app/testflight/id899247664)。TestFlight 需要 iOS 16 或 iPadOS 16 及以上版本。
+2. 在同一台设备上打开 [WA2 公开邀请](https://testflight.apple.com/join/fuwpaUZc)，在 TestFlight 中点 **接受**，再点 **安装**。已经加入测试的用户可以在 TestFlight 里点 **更新**。
+3. 安装后按[第四步：导入游戏数据](#第四步导入游戏数据)复制自己准备的游戏资源。
+
+TestFlight 会直接下载并安装当前可用的测试版本。使用 iOS 15、iPadOS 15 或希望安装 GitHub 正式版的用户，可以按下一节下载并签名安装 IPA。
+
+> 从侧载版切换到 TestFlight 版前，请先通过访达文件共享或设备上的「文件」App 备份游戏资源和 `saves` 文件夹。两种安装方式使用不同的应用数据目录，请把需要保留的数据复制到新安装的 WA2 目录。
 
 ### iPhone / iPad（Sideloadly）
 
