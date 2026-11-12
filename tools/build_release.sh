@@ -1,12 +1,11 @@
 #!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
-# Build unsigned release packages for iPhone/iPad/Vision Pro, Apple TV and Mac.
+# Build release packages for iPhone, iPad, Vision Pro and Mac.
 #
 # Required environment:
 #   GODOT          Godot 4.5.1 .NET editor binary
-#   TVOS_ENGINE    pinned tvOS Godot source tree with bin/ built (see APPLE_TV.md)
 #   FFMPEG_SOURCE  ffmpeg-7.1.5.tar.xz, attached to the release for the LGPL
-# Optional: SKIP_TVOS=1, SKIP_MACOS=1
+# Optional: SKIP_MACOS=1, or SKIP_TVOS=0 with TVOS_ENGINE (see APPLE_TV.md)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${GODOT:?set GODOT}" "${FFMPEG_SOURCE:?set FFMPEG_SOURCE}"
@@ -26,7 +25,7 @@ xcodebuild -project build/ios/WA2.xcodeproj -scheme WA2 -configuration Release -
   CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO DEVELOPMENT_TEAM= build -quiet
 python3 tools/package_ipa.py build/ios-derived/Build/Products/Release-iphoneos/WA2.app "$OUT/WA2-iPhone-iPad.ipa"
 
-if [ "${SKIP_TVOS:-0}" != 1 ]; then
+if [ "${SKIP_TVOS:-1}" != 1 ]; then
   echo "== Apple TV"
   : "${TVOS_ENGINE:?set TVOS_ENGINE}"
   TVOS_GODOT="$TVOS_ENGINE/bin/godot.macos.editor.arm64.mono"

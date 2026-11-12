@@ -92,15 +92,14 @@ python3 tools/prepare_game_data.py "/Special Contents 安装目录" ~/Desktop/Wa
 
 ## 第二步：获取安装包
 
-当前移动设备版本：[v0.4.1 · Build 10](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build10)，适用于 iPhone、iPad 和 Vision Pro。Mac 保留 Build 8；Apple TV 暂停更新，除非维护者另行通知。
+当前版本 [v0.4.2 · Build 12](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.2) 适用于 iPhone、iPad、Vision Pro 和 Apple 芯片 Mac。
 
 在本仓库的 [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases) 页面下载：
 
 | 文件 | 用途 |
 | --- | --- |
 | [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa) | iPhone / iPad，未签名，用 Sideloadly 以你自己的 Apple ID 签名安装 |
-| [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-AppleTV.ipa) | Apple TV，Build 8，未签名；暂停更新 |
-| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-macOS.dmg) | Mac（Apple 芯片），Build 8 |
+| [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg) | Mac（Apple 芯片） |
 | [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz) | 应用所用 FFmpeg 的对应源码（LGPL 要求随附，玩游戏用不到） |
 | [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt) | 校验值 |
 
@@ -298,7 +297,7 @@ xcodebuild -project build/ios/WA2.xcodeproj -scheme WA2 -configuration Release -
 python3 tools/package_ipa.py build/ios-derived/Build/Products/Release-iphoneos/WA2.app build/WA2-iPhone-iPad.ipa
 ```
 
-- 一次性生成全部发行包（iOS / tvOS / Mac、许可文件、FFmpeg 源码与校验值）：`GODOT=… TVOS_ENGINE=… FFMPEG_SOURCE=… tools/build_release.sh`，输出在 `build/release/`。
+- 运行 `GODOT=… FFMPEG_SOURCE=… tools/build_release.sh`，在 `build/release/` 生成 iPhone、iPad、Vision Pro 和 Mac 的安装包，以及许可文件、FFmpeg 源码和校验值。
 - FFmpeg 视频插件和 iOS 模板的准备步骤见 [APPLE_PORT.md](APPLE_PORT.md) 和 [addons/wmv_video/BUILDING.md](addons/wmv_video/BUILDING.md)。
 - Apple TV 使用锁定版本的 Godot tvOS 开发分支和本仓库的引擎补丁，完整步骤见 [APPLE_TV.md](APPLE_TV.md)。
 - 应用图标由 `tools/make_app_icons.py` 生成，是原创的几何雪花图案。

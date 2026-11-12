@@ -46,13 +46,12 @@ Do not nest folders. `Wa2Res` must directly contain `BGM.PAK`, `IC/` and so on.
 
 ## 2. Get the app package
 
-Current mobile release: [v0.4.1 · Build 10](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.1-build10), for iPhone, iPad and Vision Pro. Mac remains on Build 8. Apple TV updates are paused until the maintainer explicitly announces otherwise.
+[v0.4.2 · Build 12](https://github.com/galhack/WhiteAlbum2_iOS/releases/tag/v0.4.2) is available for iPhone, iPad, Vision Pro, and Mac with Apple silicon.
 
 Download from [Releases](https://github.com/galhack/WhiteAlbum2_iOS/releases):
 
 - [WA2-iPhone-iPad.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-iPhone-iPad.ipa): iPhone/iPad, unsigned. Sign it with your own Apple ID in Sideloadly.
-- [WA2-AppleTV.ipa](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-AppleTV.ipa): Apple TV, Build 8, unsigned; updates paused.
-- [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/download/v0.4.1/WA2-macOS.dmg): Mac with Apple silicon, Build 8.
+- [WA2-macOS.dmg](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/WA2-macOS.dmg) — Mac with Apple silicon.
 - [ffmpeg-7.1.5.tar.xz](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/ffmpeg-7.1.5.tar.xz): the corresponding FFmpeg source, provided as the LGPL requires. You do not need it to play.
 - [SHA256SUMS.txt](https://github.com/galhack/WhiteAlbum2_iOS/releases/latest/download/SHA256SUMS.txt): checksums.
 
@@ -150,7 +149,7 @@ xcodebuild -project build/ios/WA2.xcodeproj -scheme WA2 -configuration Release -
 python3 tools/package_ipa.py build/ios-derived/Build/Products/Release-iphoneos/WA2.app build/WA2-iPhone-iPad.ipa
 ```
 
-To produce every release package at once (iOS, tvOS, Mac, notices, FFmpeg source and checksums), run `GODOT=… TVOS_ENGINE=… FFMPEG_SOURCE=… tools/build_release.sh`. The output goes to `build/release/`.
+Run `GODOT=… FFMPEG_SOURCE=… tools/build_release.sh` to build packages for iPhone, iPad, Vision Pro, and Mac. The packages, notices, FFmpeg source, and checksums go to `build/release/`.
 
 For the FFmpeg plugin and templates, see [APPLE_PORT.md](APPLE_PORT.md) and [addons/wmv_video/BUILDING.md](addons/wmv_video/BUILDING.md). For Apple TV, see [APPLE_TV.md](APPLE_TV.md).
 
