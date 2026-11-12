@@ -1591,6 +1591,12 @@ public partial class Wa2EngineMain : Control
 		{
 			Shader = GD.Load<Shader>(shaderPath)
 		};
+		// Snow shaders advance one 60 Hz simulation tick per process call.
+		// Use the same clock for both depth layers; shader VELOCITY supplies
+		// sub-frame motion without integrating the trajectory twice.
+		particleLayer.FixedFps = 60;
+		particleLayer.Interpolate = true;
+		particleLayer.FractDelta = false;
 		particleLayer.Texture = texture;
 		particleLayer.Material = null;
 		particleLayer.ProcessMaterial = material;
@@ -1732,7 +1738,7 @@ public partial class Wa2EngineMain : Control
 	}
 	public void SetWeatherSpeedY(int val)
 	{
-		WeatherInfo.SpeedX = val;
+		WeatherInfo.SpeedY = val;
 		if (WeatherParticles.ProcessMaterial != null && WeatherParticles.ProcessMaterial is ShaderMaterial)
 		{
 			(WeatherParticles.ProcessMaterial as ShaderMaterial).SetShaderParameter("speed_y", val);

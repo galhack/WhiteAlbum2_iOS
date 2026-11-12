@@ -112,6 +112,7 @@ void reset(uint seed,inout vec4 custom, inout vec4 userdata1,inout vec4 userdata
 	}
 }
 void start(){
+	VELOCITY = vec3(0.0);
 
 	if (USERDATA3.x==0.0){
 		reset(NUMBER + uint(TIME * 100.0),CUSTOM,USERDATA1,USERDATA2,USERDATA3);
@@ -123,43 +124,53 @@ void start(){
 	}
 }
 void process() {
-	uint seed = NUMBER;
-    // 垂直下落，并使用 mod 实现超出屏幕底部后自动回到顶部
-	float ssx = CUSTOM.z;
-	float ssy = CUSTOM.w;
-	float my_speed_x = speed_x * ssx;
-	float my_speed_y = speed_y * ssy;
-	USERDATA1.x++;
-	// 更新 y 坐标 (匀速下落示例)
-	float v69;
-	float v70;
-	float v71;
-	bool mask800_flag=((mask&0x800)!=0);
-	if (mask800_flag){
-		v69=0.000244140625*float(drift_table[(int(USERDATA1.x)+64)%256])*speed_y*ssx;
-		v70=(USERDATA2.x-640.0)/(5120.0/((USERDATA2.z+1.0)-USERDATA2.w));
-		v71=v69/40.0+my_speed_x/10.0;	
-	}else{
-		v70=0.000244140625*float(drift_table[(int(USERDATA1.x)+64)%256])*speed_y*ssx/40.0;
-		v71=my_speed_x/10.0;
-	}
-	CUSTOM.x += v70+v71;
-	CUSTOM.y+=my_speed_y/10.0;
-	if((CUSTOM.y>720.0||((CUSTOM.x<(4.0*USERDATA2.w-1024.0)||CUSTOM.x>(2.0*(896.0-USERDATA2.w))))&&mask800_flag)){
-		reset(NUMBER,CUSTOM,USERDATA1,USERDATA2,USERDATA3);
-		TRANSFORM[3].xy = CUSTOM.xy;
-		TRANSFORM[0].xy = normalize(TRANSFORM[0].xy) * USERDATA3.y;
-		TRANSFORM[1].xy = normalize(TRANSFORM[1].xy) * USERDATA3.y;
-		COLOR.a=USERDATA1.y;
-	}
-	else if(CUSTOM.x>(2.0*(896.0-USERDATA2.w))&&!mask800_flag){
-		CUSTOM.x-=2.0*(896.0-USERDATA2.w);
-		TRANSFORM[3].xy = vec2(CUSTOM.x, CUSTOM.y);
-	}else if(CUSTOM.x<(4.0*USERDATA2.w-1024.0)&&!mask800_flag){
-		CUSTOM.x+=2.0*(896.0-USERDATA2.w);
-		TRANSFORM[3].xy = vec2(CUSTOM.x, CUSTOM.y);
-	}else{
-		TRANSFORM[3].xy = vec2(CUSTOM.x, CUSTOM.y);
-	}
+	VELOCITY = vec3(0.0);
+	if (DELTA > 0.0) {
+		vec2 previous_position = TRANSFORM[3].xy;
+		bool relocated = false;
+		uint seed = NUMBER;
+	    // 垂直下落，并使用 mod 实现超出屏幕底部后自动回到顶部
+		float ssx = CUSTOM.z;
+		float ssy = CUSTOM.w;
+		float my_speed_x = speed_x * ssx;
+		float my_speed_y = speed_y * ssy;
+		USERDATA1.x++;
+		// 更新 y 坐标 (匀速下落示例)
+		float v69;
+		float v70;
+		float v71;
+		bool mask800_flag=((mask&0x800)!=0);
+		if (mask800_flag){
+			v69=0.000244140625*float(drift_table[(int(USERDATA1.x)+64)%256])*speed_y*ssx;
+			v70=(USERDATA2.x-640.0)/(5120.0/((USERDATA2.z+1.0)-USERDATA2.w));
+			v71=v69/40.0+my_speed_x/10.0;
+		}else{
+			v70=0.000244140625*float(drift_table[(int(USERDATA1.x)+64)%256])*speed_y*ssx/40.0;
+			v71=my_speed_x/10.0;
+		}
+		CUSTOM.x += v70+v71;
+		CUSTOM.y+=my_speed_y/10.0;
+		if((CUSTOM.y>720.0||((CUSTOM.x<(4.0*USERDATA2.w-1024.0)||CUSTOM.x>(2.0*(896.0-USERDATA2.w))))&&mask800_flag)){
+			relocated = true;
+			reset(NUMBER,CUSTOM,USERDATA1,USERDATA2,USERDATA3);
+			TRANSFORM[3].xy = CUSTOM.xy;
+			TRANSFORM[0].xy = normalize(TRANSFORM[0].xy) * USERDATA3.y;
+			TRANSFORM[1].xy = normalize(TRANSFORM[1].xy) * USERDATA3.y;
+			COLOR.a=USERDATA1.y;
+		}
+		else if(CUSTOM.x>(2.0*(896.0-USERDATA2.w))&&!mask800_flag){
+			relocated = true;
+			CUSTOM.x-=2.0*(896.0-USERDATA2.w);
+			TRANSFORM[3].xy = vec2(CUSTOM.x, CUSTOM.y);
+		}else if(CUSTOM.x<(4.0*USERDATA2.w-1024.0)&&!mask800_flag){
+			relocated = true;
+			CUSTOM.x+=2.0*(896.0-USERDATA2.w);
+			TRANSFORM[3].xy = vec2(CUSTOM.x, CUSTOM.y);
+		}else{
+			TRANSFORM[3].xy = vec2(CUSTOM.x, CUSTOM.y);
+		}
 
+		VELOCITY = relocated ? vec3(0.0) : vec3((TRANSFORM[3].xy - previous_position) / DELTA, 0.0);
+
+	}
 }

@@ -92,6 +92,7 @@ float particle_scale(vec4 custom, vec4 userdata1) {
 }
 
 void start(){
+	VELOCITY = vec3(0.0);
 	// CUSTOM is cleared for a fresh buffer and its age survives normal re-emission.
 	// Reusing the age avoids a second USERDATA attribute in GLES3 transform feedback.
 	if (CUSTOM.w == 0.0) {
@@ -104,24 +105,26 @@ void start(){
 	}
 }
 void process(){
-	uint seed=NUMBER;
-
-	if (CUSTOM.x<360.0){
-		CUSTOM.x += (USERDATA1.y + 2.0) * speed_x / 100.0;
-	}else{
-		CUSTOM.x=0.0;
+	VELOCITY = vec3(0.0);
+	if (DELTA > 0.0) {
+		vec2 previous_position = TRANSFORM[3].xy;
+		// Keep the remainder at a full turn instead of jumping back to zero.
+		CUSTOM.x = mod(CUSTOM.x + (USERDATA1.y + 2.0) * speed_x / 100.0, 360.0);
+		vec2 pos = particle_position(CUSTOM, USERDATA1);
+		bool relocated = outside_particle_area(pos);
+		if (relocated) {
+			active(false, NUMBER + uint(CUSTOM.w) + 17u, CUSTOM, USERDATA1);
+			pos = particle_position(CUSTOM, USERDATA1);
+		}
+		// Position, opacity and size describe the same simulation instant.
+		TRANSFORM[3].xy = pos;
+		COLOR.a = particle_alpha_from_radius(CUSTOM.y);
+		float scale = particle_scale(CUSTOM, USERDATA1);
+		TRANSFORM[0].xy = normalize(TRANSFORM[0].xy) * scale;
+		TRANSFORM[1].xy = normalize(TRANSFORM[1].xy) * scale;
+		VELOCITY = relocated ? vec3(0.0) : vec3((pos - previous_position) / DELTA, 0.0);
+		CUSTOM.z += speed_y * (USERDATA1.y + 2.0) / 20000.0;
+		CUSTOM.y += CUSTOM.z;
+		CUSTOM.w += 1.0;
 	}
-	vec2 pos = particle_position(CUSTOM, USERDATA1);
-	if (outside_particle_area(pos)) {
-		active(false, seed + uint(CUSTOM.w) + 17u, CUSTOM, USERDATA1);
-		pos = particle_position(CUSTOM, USERDATA1);
-	}
-	CUSTOM.z += speed_y * (USERDATA1.y + 2.0) / 20000.0;
-	CUSTOM.y += CUSTOM.z;
-	CUSTOM.w += 1.0;
-	TRANSFORM[3].xy = pos;
-	COLOR.a = particle_alpha_from_radius(CUSTOM.y);
-	float scale = particle_scale(CUSTOM, USERDATA1);
-	TRANSFORM[0].xy = normalize(TRANSFORM[0].xy) * scale;
-	TRANSFORM[1].xy = normalize(TRANSFORM[1].xy) * scale;
 }

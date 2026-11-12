@@ -90,9 +90,8 @@ func _add_snow_layer(viewport: SubViewport, texture: Texture2D, count: int, laye
 	snow.explosiveness = 1.0
 	snow.use_fixed_seed = true
 	snow.seed = 1263 + layer_mode
-	# Match the scene node for the normal layer and node defaults for the large layer.
-	if layer_mode == 1:
-		snow.fixed_fps = 60
-		snow.interpolate = false
-		snow.fract_delta = false
+	# Match SetupSnowWeatherLayer: both layers share the simulation clock.
+	snow.fixed_fps = 60
+	snow.interpolate = true
+	snow.fract_delta = false
 	viewport.add_child(snow)
