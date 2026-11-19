@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Add a single-window scene lifecycle adapter to Godot 4.5's exported project."""
+"""Add WA2's UIKit lifecycle and renderer setup to the Godot 4.5 export."""
 import argparse
 import plistlib
 import shutil
@@ -23,7 +23,9 @@ def prepare(directory):
     include = '#include "WA2SceneDelegate.mm"'
     if include not in text:
         target.write_text(text + "\n" + include + "\n")
-    shutil.copy2(Path(__file__).parents[1] / "native/ios/WA2SceneDelegate.mm", application / "WA2SceneDelegate.mm")
+    native = Path(__file__).parents[1] / "native/ios"
+    for name in ("WA2SceneDelegate.mm", "WA2RendererArguments.h"):
+        shutil.copy2(native / name, application / name)
     (application / "WA2CloudBridge.mm").unlink(missing_ok=True)
     pbx = project / "project.pbxproj"
     text = pbx.read_text().replace("dummy.cpp", "dummy.mm")
