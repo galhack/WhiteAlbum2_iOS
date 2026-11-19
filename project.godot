@@ -57,6 +57,9 @@ Skip={
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+; Godot 4.5.1's iOS OpenGL layer reads this setting when creating its context.
+; The native launcher selects Mobile explicitly on Apple4-capable GPUs.
+renderer/rendering_method.ios="gl_compatibility"
 renderer/rendering_method.mobile="mobile"
 textures/vram_compression/import_etc2_astc=true
 textures/lossless_compression/force_png=true

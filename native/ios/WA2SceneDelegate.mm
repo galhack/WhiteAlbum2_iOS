@@ -19,6 +19,7 @@ extern char **gargv;
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // This callback runs before Godot's didFinishLaunching service reads argv.
     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    BOOL supportsApple4 = [device supportsFamily:MTLGPUFamilyApple4];
     NSBundle *bundle = NSBundle.mainBundle;
     NSArray *bundleArguments = [bundle objectForInfoDictionaryKey:@"godot_cmdline"];
     NSUInteger bundleArgumentCount = bundleArguments.count;
@@ -26,12 +27,13 @@ extern char **gargv;
         bundleArgumentCount += 2;
     }
     static char *arguments[WA2GodotArgumentCapacity];
-    int count = WA2SelectRendererArguments([device supportsFamily:MTLGPUFamilyApple4],
+    int count = WA2SelectRendererArguments(supportsApple4,
                                           gargc, gargv, bundleArgumentCount, arguments);
     if (count != 0) {
         gargc = count;
         gargv = arguments;
-        NSLog(@"WA2 selected Compatibility for a GPU below Apple4.");
+        NSLog(@"WA2 selected %@ for %@.", supportsApple4 ? @"Mobile" : @"Compatibility",
+              device.name ?: @"an unavailable Metal device");
     }
     return YES;
 }
